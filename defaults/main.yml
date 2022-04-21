@@ -1,0 +1,56 @@
+---
+alternatives: true
+alternatives_update:
+  - name: php
+    state: present
+    link: /usr/bin/php
+    alternatives:
+      - path: /usr/bin/php7.4
+        state: present
+        priority: 74
+      - path: /usr/bin/php8.0
+        state: present
+        priority: 80
+      - path: /usr/bin/php8.1
+        state: present
+        priority: 81
+  - name: phar
+    state: present
+    link: /usr/bin/phar
+    alternatives:
+      - path: /usr/bin/phar7.4
+        state: present
+        priority: 74
+      - path: /usr/bin/phar8.0
+        state: present
+        priority: 80
+      - path: /usr/bin/phar8.1
+        state: present
+        priority: 81
+  - name: phar.phar
+    state: present
+    link: /usr/bin/phar.phar
+    alternatives:
+      - path: /usr/bin/phar.phar7.4
+        state: present
+        priority: 74
+      - path: /usr/bin/phar.phar8.0
+        state: present
+        priority: 80
+      - path: /usr/bin/phar.phar8.1
+        state: present
+        priority: 81
+  - name: php-fpm.sock
+    link: /run/php/php-fpm.sock
+    state: present
+    alternatives:
+      - path: /run/php/php7.4-fpm.sock
+        state: present
+        priority: 74
+      - path: /run/php/php8.0-fpm.sock
+        state: present
+        priority: 80
+      - path: /run/php/php8.1-fpm.sock
+        state: present
+        priority: 81
+...
