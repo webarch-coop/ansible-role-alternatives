@@ -28,7 +28,7 @@
 
     - name: Generate an array of alternatives for the facts script
       set_fact:
-        alternatives_names: "{{ alternatives_update | map(attribute='name' }}"
+        alternatives_names: "{{ alternatives_update | map(attribute='name') }}"
 
     - name: Debug alternatives
       debug:
@@ -46,7 +46,7 @@
     - name: Re-read Ansible local facts
       ansible.builtin.setup:
         filter: ansible_local
-      when: alternatives_facts.changed
+      when: ( alternatives_facts.changed ) or ( alternatives_facts_config.changed )
 
     - name: Print Ansible update-alternatives --query variables
       debug:
