@@ -4,18 +4,26 @@ An Ansible role to manage [Debian alternatives](https://wiki.debian.org/DebianAl
 
 ## Plan
 
-The plan for this role is to have a `defaults/main.yml` containing a list of Debian alternatives we are interested in:
+The plan for this role is to have a `defaults/main.yml` containing a list of Debian alternatives we want to configure:
 
 ```yml
 alternatives: true
-alternatives_names:
-  - php
-  - phar
-  - phar.phar
-  - php-fpm.sock
+alternatives_update:
+  - name: php
+    state: present
+    alternatives:
+      - path: /usr/bin/php7.4
+        state: present
+        priority: 74
+      - path: /usr/bin/php8.0
+        state: present
+        priority: 80
+      - path: /usr/bin/php8.1
+        state: present
+        priority: 81
 ```
 
-And for this list to be used by a `/etc/ansible/facts.d/alternatives.fact` script which runs:
+And for the names from this list to be used by a `/etc/ansible/facts.d/alternatives.fact` script which runs:
 
 ```bash
 update-alternatives --get-selections
@@ -70,23 +78,6 @@ alternatives:
         priority: 81
 ```
 
-And to set alternatives in the [main/defaults.yml](main/defaults.yml) file:
-
-```
-alternatives:
-  - name: php
-    state: present
-    alternatives:
-      - path: /usr/bin/php7.4
-        state: present
-        priority: 74
-      - path: /usr/bin/php8.0
-        state: present
-        priority: 80
-      - path: /usr/bin/php8.1
-        state: present
-        priority: 81
-```
-
+And then this role updates alternatives when the proposed alternatives don't match the facts.
 
 
