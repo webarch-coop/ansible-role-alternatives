@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Ansible managed
+
+set -euo pipefail
+
+# Read selections fron a file since this file can't be written using the Ansible
+# template module as there is no way to alter the defult Jinja2 comment format
+# {# comment #} clashes with getting the the numbers of items in a Bash array
+
+if [[ -f "/etc/ansible/alternatives" ]]
+then
+  declare -a selections=()
+  mapfile -t selections < <(grep -v '^#' /etc/ansible/alternatives)
+else
+  echo "Config file /etc/ansible/alternatives not found" >&2
+  jo state=absent
+  exit
+fi
+
+jo $(
+  for sel in "${selections[@]}"
+  do
+    echo "${sel}"=$( 
+      if query=$(update-alternatives --query "${sel}")
+      then
+        declare -a alternatives=()
+        readarray -t alternatives < <(grep -e '^Alternative' <<< "${query}" | sed 's/Alternative: //')
+        declare -a priorities=()
+        readarray -t priorities < <(grep -e '^Priority' <<< "${query}" | sed 's/Priority: //')
+        #echo "alternatives: ${alternatives[@]}" >&2
+        #echo "priorities: ${priorities[@]}" >&2
+        jo state=present name="${sel}" link=$(
+          grep ^Link <<< "${query}" | sed 's/^Link: //'
+        ) value=$(
+          grep ^Value <<< "${query}" | sed 's/^Value: //'
+        ) best=$(
+          grep ^Best <<< "${query}" | sed 's/Best: //'
+        ) alternatives=$(
+          jo -a $(
+            for i in $(seq 0 $(("${#alternatives[@]}"-1)))
+            do
+              jo state=present path="${alternatives[${i}]}" priority="${priorities[${i}]}" 
+            done
+          )
+        )
+      else
+        jo state=absent
+      fi
+    )
+  done
+)

@@ -1,0 +1,41 @@
+---
+- name: Ansible alternatives local facts
+  block:
+
+    - name: Required packages present
+      ansible.builtin.apt:
+        pkg:
+          - jo
+        state: present
+
+    - name: Ansible facts.d directory present
+      ansible.builtin.file:
+        path: /etc/ansible/facts.d
+        recurse: true
+        state: directory
+        mode: 0700
+        owner: root
+        group: root
+
+    - name: Ansible alternatives local facts script present
+      copy:
+        src: alternatives.fact
+        dest: /etc/ansible/facts.d/alternatives.fact
+        mode: 0700
+        owner: root
+        group: root
+      register: alternatives_facts
+
+    - name: Re-read Ansible local facts
+      ansible.builtin.setup:
+        filter: ansible_local
+      when: alternatives_facts.changed
+
+    - name: Print Ansible update-alternatives --query variables
+      debug:
+        msg: "{{ ansible_local.alternatives }}"
+        verbosity: 2
+
+  tags:
+    - alternatives
+...

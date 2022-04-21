@@ -1,0 +1,10 @@
+---
+- name: Ansible update-alternatives
+  block:
+
+    - name: Include local facts tasks
+      include_tasks: local_facts.yml
+
+  tags:
+    - alternatives
+...
