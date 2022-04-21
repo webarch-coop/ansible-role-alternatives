@@ -26,6 +26,23 @@
         group: root
       register: alternatives_facts
 
+    - name: Generate an array of alternatives for the facts script
+      set_fact:
+        alternatives_names: "{{ alternatives_update | map(attribute='name' }}"
+
+    - name: Debug alternatives
+      debug:
+        var: alternatives_names
+
+    - name: Ansible alternatives local facts config present
+      template:
+        src: alternatives.j2
+        dest: /etc/ansible/alternatives
+        mode: 0600
+        owner: root
+        group: root
+      register: alternatives_facts_config
+
     - name: Re-read Ansible local facts
       ansible.builtin.setup:
         filter: ansible_local
