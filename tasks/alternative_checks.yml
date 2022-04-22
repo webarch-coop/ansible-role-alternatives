@@ -10,7 +10,7 @@
     - name: "Fail if {{ alternative.path }} for {{ alt.key }} doesn't exist"
       assert:
         that:
-          -  alternatives_alternative_path.stat.exists
+          - alternatives_alternative_path.stat.exists
 
     - name: "Check alternative priority for {{ alternative.path }} for {{ alt.key }}"
       assert:

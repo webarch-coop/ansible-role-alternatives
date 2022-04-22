@@ -26,7 +26,7 @@
         group: root
       register: alternatives_facts
 
-    - name: Include tasks to generate alternatives present and alternatives absent tasks 
+    - name: Include tasks to generate alternatives present and alternatives absent tasks
       include_tasks: alternatives.yml
       when: ( alternatives_update is defined ) and ( alternatives_update != {} )
 

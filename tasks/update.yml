@@ -18,7 +18,7 @@
           when: alternative.state == "absent"
 
         - name: Include update alternative tasks
-          include_tasks: update_alternative.yml 
+          include_tasks: update_alternative.yml
           loop: "{{ alt.value.alternatives }}"
           loop_control:
             loop_var: alternative
