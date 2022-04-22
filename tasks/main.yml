@@ -39,7 +39,7 @@
     - name: Reload ansible_local.alternative facts
       meta: flush_handlers
 
-    - name: Debug the updated ansible_local.alternative facts when they have changed
+    - name: Debug the updated ansible_local.alternatives facts when they have changed
       debug:
         var: ansible_local.alternatives
         verbosity: 2
