@@ -15,6 +15,7 @@
       debug:
         var: alternatives_present
         verbosity: 2
+      when: alternatives_present is defined
 
     - name: Generate an array of alternatives absent
       set_fact:
@@ -29,6 +30,7 @@
       debug:
         var: alternatives_absent
         verbosity: 2
+      when: alternatives_absent is defined
 
   when: ( alternatives_update is defined ) and ( alternatives_update != {} ) 
   tags:

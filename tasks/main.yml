@@ -10,11 +10,11 @@
 
         - name: Set a variable for the existing ansible_local.alternatives is defined
           set_fact:
-            alternative_previous_facts: "{{ ansible_local.alternatives }}"
+            alternatives_previous_facts: "{{ ansible_local.alternatives }}"
 
         - name: Debug the current ansible_local.alternative facts
           debug:
-            var: ansible_local.alternative
+            var: ansible_local.alternatives
             verbosity: 2
 
       when: ( ansible_local.alternatives is defined ) and ( ansible_local.alternatives != {} )
@@ -43,7 +43,9 @@
       debug:
         var: ansible_local.alternative
         verbosity: 2
-      when: ansible_local.alternative != alternative_previous_facts
+      when:
+        - alternatives_previous_facts is defined
+        - ansible_local.alternative != alternatives_previous_facts
 
   when: alternatives
   tags:

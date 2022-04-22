@@ -9,7 +9,7 @@
     - name: "Updates alternatives for {{ alt.key }}"
       block:
 
-        - name: "Remove alternative {{ alternative.path }} for {{ alt.key }}"
+        - name: Remove alternatives
           ansible.builtin.command: "update-alternatives --remove {{ alt.key }} {{ alternative.path }}"
           when: alternative.state == "absent"
           loop: "{{ alt.value.alternatives }}"
@@ -17,7 +17,7 @@
             loop_var: alternative
             label: "{{ alternative.path }}"
 
-        - name: "Update alternative {{ alternative.path }} with priority {{ alternative.priority }} for {{ alt.key }}"
+        - name: Update alternative
           community.general.alternatives:
             name: "{{ alt.key }}"
             link: "{{ alt.value.link }}"
