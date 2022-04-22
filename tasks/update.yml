@@ -17,8 +17,14 @@
             label: "{{ alternative.path }}"
           when: alternative.state == "absent"
 
+        - name: Debug alt.value.alternatives
+          debug:
+            var: alt.value.alternatives
+            verbosity: 2
+          when: alt.value.alternatives is defined
+
         - name: Include update alternative tasks
-          include_tasks: update_alternative.yml
+          ansible.builtin.include_tasks: update_alternative.yml
           loop: "{{ alt.value.alternatives }}"
           loop_control:
             loop_var: alternative
