@@ -1,0 +1,17 @@
+---
+- name: Update alternative
+  block:
+
+    - name: Debug alternative
+      debug:
+        var: alternative
+
+#    - name: Check if the existing alternative matches the proposed alternative
+#      set_fact:
+#        alternatives_update_needed:
+#      when: >
+#        ( ansible_local.alternatives[alt.key].
+
+  tags:
+    - alternatives
+...
