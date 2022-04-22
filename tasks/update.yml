@@ -9,25 +9,32 @@
     - name: "Updates alternatives for {{ alt.key }}"
       block:
 
-        - name: Remove alternatives
-          ansible.builtin.command: "update-alternatives --remove {{ alt.key }} {{ alternative.path }}"
-          when: alternative.state == "absent"
+        - name: Include alternative tasks
+          include_tasks: update_alternative.yml 
           loop: "{{ alt.value.alternatives }}"
           loop_control:
             loop_var: alternative
             label: "{{ alternative.path }}"
 
-        - name: Update alternative
-          community.general.alternatives:
-            name: "{{ alt.key }}"
-            link: "{{ alt.value.link }}"
-            path: "{{ alternative.path }}"
-            priority: "{{ alternative.priority }}"
-          when: alternative.state == "present"
-          loop: "{{ alt.value.alternatives }}"
-          loop_control:
-            loop_var: alternative
-            label: "{{ alternative.path }}"
+#        - name: Remove alternatives
+#          ansible.builtin.command: "update-alternatives --remove {{ alt.key }} {{ alternative.path }}"
+#          when: alternative.state == "absent"
+#          loop: "{{ alt.value.alternatives }}"
+#          loop_control:
+#            loop_var: alternative
+#            label: "{{ alternative.path }}"
+#
+#        - name: Update alternative
+#          community.general.alternatives:
+#            name: "{{ alt.key }}"
+#            link: "{{ alt.value.link }}"
+#            path: "{{ alternative.path }}"
+#            priority: "{{ alternative.priority }}"
+#          when: alternative.state == "present"
+#          loop: "{{ alt.value.alternatives }}"
+#          loop_control:
+#            loop_var: alternative
+#            label: "{{ alternative.path }}"
  
       when: alt.value.state == "present"
 

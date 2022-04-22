@@ -41,7 +41,7 @@
 
     - name: Debug the updated ansible_local.alternative facts when they have changed
       debug:
-        var: ansible_local.alternative
+        var: ansible_local.alternatives
         verbosity: 2
       when:
         - alternatives_previous_facts is defined
