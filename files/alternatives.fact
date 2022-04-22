@@ -26,7 +26,7 @@ jo -a $(
       readarray -t alternatives < <(grep -e '^Alternative' <<< "${query}" | sed 's/Alternative: //')
       declare -a priorities=()
       readarray -t priorities < <(grep -e '^Priority' <<< "${query}" | sed 's/Priority: //')
-      jo state=present name="${sel}" link=$(
+      jo name="${sel}" state=present link=$(
         grep ^Link <<< "${query}" | sed 's/^Link: //'
       ) status=$(
         grep ^Status <<< "${query}" | sed 's/^Status: //'
