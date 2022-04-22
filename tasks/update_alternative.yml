@@ -36,8 +36,8 @@
         var: alternative.priority
         verbosity: 2
 
-    - name: Update alternative when existing alternative is not defined
-      community.general.alternatives:
+    - name: Install alternatives when existing alternatives are not defined
+      ansible.builtin.command: "update-alternatives --install {{ alt.value.link }} {{ alt.key }} {{ alternative.path }} {{ alternative.priority }}"
         name: "{{ alt.key }}"
         link: "{{ alt.value.link }}"
         path: "{{ alternative.path }}"
@@ -45,22 +45,14 @@
       when: ansible_local.alternatives[alt.key].alternatives is not defined
 
     - name: Update alternative when existing alternative is defined but the link has changed
-      community.general.alternatives:
-        name: "{{ alt.key }}"
-        link: "{{ alt.value.link }}"
-        path: "{{ alternative.path }}"
-        priority: "{{ alternative.priority }}"
+      ansible.builtin.command: "update-alternatives --install {{ alt.value.link }} {{ alt.key }} {{ alternative.path }} {{ alternative.priority }}"
       when:
         - ansible_local.alternatives[alt.key].alternatives is defined
         - alternatives_existing_path is defined
         - alternatives_existing_path != alternative.path
 
     - name: Update alternative when existing alternative is defined but the priority has changed
-      community.general.alternatives:
-        name: "{{ alt.key }}"
-        link: "{{ alt.value.link }}"
-        path: "{{ alternative.path }}"
-        priority: "{{ alternative.priority }}"
+      ansible.builtin.command: "update-alternatives --install {{ alt.value.link }} {{ alt.key }} {{ alternative.path }} {{ alternative.priority }}"
       when:
         - ansible_local.alternatives[alt.key].alternatives is defined
         - alternatives_existing_priority is defined
