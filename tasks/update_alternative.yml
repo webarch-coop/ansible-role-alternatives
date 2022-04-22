@@ -20,28 +20,51 @@
         verbosity: 2
       when: alternatives_existing_path is defined
 
+    - name: Debug proposed alternative path
+      debug:
+        var: alternative.path
+        verbosity: 2
+
     - name: Debug existing alternative path
       debug:
         var: alternatives_existing_priority
         verbosity: 2
       when: alternatives_existing_priority is defined
 
-    - name: Debug proposed alternative
+    - name: Debug proposed alternative priority
       debug:
-        var: alternative
+        var: alternative.priority
         verbosity: 2
 
-    - name: Update alternative
+    - name: Update alternative when existing alternative is not defined
+      community.general.alternatives:
+        name: "{{ alt.key }}"
+        link: "{{ alt.value.link }}"
+        path: "{{ alternative.path }}"
+        priority: "{{ alternative.priority }}"
+      when: ansible_local.alternatives[alt.key].alternatives is not defined
+
+    - name: Update alternative when existing alternative is defined but the link has changed
+      community.general.alternatives:
+        name: "{{ alt.key }}"
+        link: "{{ alt.value.link }}"
+        path: "{{ alternative.path }}"
+        priority: "{{ alternative.priority }}"
+      when:
+        - ansible_local.alternatives[alt.key].alternatives is defined
+        - alternatives_existing_path is defined
+        - alternatives_existing_path != alternative.path
+
+    - name: Update alternative when existing alternative is defined but the priority has changed
       community.general.alternatives:
         name: "{{ alt.key }}"
         link: "{{ alt.value.link }}"
         path: "{{ alternative.path }}"
         priority: "{{ alternative.priority }}"
       when: >
-        ( ansible_local.alternatives[alt.key].alternatives is not defined ) or
-        ( ( ansible_local.alternatives[alt.key].alternatives is defined ) and
-        ( ( ( alternatives_existing_path is defined ) and ( alternatives_existing_path != alternative.path ) ) or
-        ( ( alternatives_existing_priority is defined ) and ( alternatives_existing_priority != alternative.priority ) ) ) )
+        ansible_local.alternatives[alt.key].alternatives is defined
+        alternatives_existing_priority is defined
+        alternatives_existing_priority != alternative.priority
 
   tags:
     - alternatives

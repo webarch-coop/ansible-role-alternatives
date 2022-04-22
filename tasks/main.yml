@@ -12,7 +12,7 @@
           set_fact:
             alternatives_previous_facts: "{{ ansible_local.alternatives }}"
 
-        - name: Debug the current ansible_local.alternative facts
+        - name: Debug the current ansible_local.alternatives facts
           debug:
             var: ansible_local.alternatives
             verbosity: 2
@@ -36,7 +36,7 @@
 
       when: ( alternatives_update is defined ) and ( alternatives_update != {} )
 
-    - name: Reload ansible_local.alternative facts
+    - name: Reload ansible_local.alternatives facts
       meta: flush_handlers
 
     - name: Debug the updated ansible_local.alternatives facts when they have changed
@@ -45,7 +45,7 @@
         verbosity: 2
       when:
         - alternatives_previous_facts is defined
-        - ansible_local.alternative != alternatives_previous_facts
+        - ansible_local.alternatives != alternatives_previous_facts
 
   when: alternatives
   tags:
