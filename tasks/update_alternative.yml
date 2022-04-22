@@ -61,7 +61,7 @@
         link: "{{ alt.value.link }}"
         path: "{{ alternative.path }}"
         priority: "{{ alternative.priority }}"
-      when: >
+      when:
         - ansible_local.alternatives[alt.key].alternatives is defined
         - alternatives_existing_priority is defined
         - alternatives_existing_priority != alternative.priority
