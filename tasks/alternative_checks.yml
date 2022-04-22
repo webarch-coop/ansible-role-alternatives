@@ -16,7 +16,7 @@
       assert:
         that:
           - alternative.priority | type_debug == "int"
-          - alternative.priority is regex(^[0-9]{1,4}$)
+          - alternative.priority is regex('^[0-9]{1,4}$')
 
   tags:
     - alternatives
