@@ -31,6 +31,8 @@ jo $(
         #echo "priorities: ${priorities[@]}" >&2
         jo state=present name="${sel}" link=$(
           grep ^Link <<< "${query}" | sed 's/^Link: //'
+        ) status=$(
+          grep ^Status <<< "${query}" | sed 's/^Status: //'
         ) value=$(
           grep ^Value <<< "${query}" | sed 's/^Value: //'
         ) best=$(
