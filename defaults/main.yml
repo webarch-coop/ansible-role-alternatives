@@ -8,7 +8,7 @@ alternatives_update:
     alternatives:
       - path: /usr/bin/php7.4
         state: present
-        priority: 74
+        priority: 50
       - path: /usr/bin/php8.0
         state: present
         priority: 80
