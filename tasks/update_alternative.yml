@@ -2,18 +2,34 @@
 - name: Update alternative
   block:
 
-    - name: Debug alternative
-      debug:
-        var: alternative
-
-    - name: Get the existing altenative values if they exist
+    - name: Get the existing alternative values if they exist
       set_fact:
         alternatives_existing_path: "{{ existing_alternative.path | default('') }}"
         alternatives_existing_priority: "{{ existing_alternative.priority | default('')}}"  
       loop: "{{ ansible_local.alternatives[alt.key].alternatives }}"
       loop_control:
         loop_var: existing_alternative
-      when: ansible_local.alternatives[alt.key].alternatives is defined
+      when:
+        - ansible_local.alternatives[alt.key].alternatives is defined
+        - existing_alternative.path is defined
+        - existing_alternative.path == alternative.path
+
+    - name: Debug existing alternative path
+      debug:
+        var: alternatives_existing_path
+        verbosity: 2
+      when: alternatives_existing_path is defined
+
+    - name: Debug existing alternative path
+      debug:
+        var: alternatives_existing_priority
+        verbosity: 2
+      when: alternatives_existing_priority is defined
+
+    - name: Debug proposed alternative
+      debug:
+        var: alternative
+        verbosity: 2
 
     - name: Update alternative
       community.general.alternatives:
