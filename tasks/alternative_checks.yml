@@ -1,0 +1,23 @@
+---
+- name: Checks for present alternative
+  block:
+
+    - name: "Check alternative path {{ alternative.path }} for {{ alt.key }}"
+      stat:
+        path: "{{ alternative.path }}"
+      register: alternatives_alternative_path
+
+    - name: "Fail if {{ alternative.path }} for {{ alt.key }} doesn't exist"
+      assert:
+        that:
+          -  alternatives_alternative_path.stat.exists
+
+    - name: "Check alternative priority for {{ alternative.path }} for {{ alt.key }}"
+      assert:
+        that:
+          - alternative.priority | type_debug == "int"
+          - alternative.priority is regex(^[0-9]{1,4}$)
+
+  tags:
+    - alternatives
+...

@@ -16,14 +16,37 @@
             that:
               - alternatives_update | type_debug == "dict"
 
-        - name: Check alternatives names
+        - name: Check alternative state
           assert:
             that:
-              - ZZ
+              - alt.value.state is defined
+              - alt.value.state is regex('^absent|present$')
           loop: "{{ alternatives_update  | dict2items }}"
           loop_control:
             loop_var: alt
             label: "{{ alt.key }}"
+
+        - name: Check alternative link and alternatives when present
+          assert:
+            that:
+              - alt.value.link is defined
+              - alt.value.link is regex('^\/')
+              - alt.value.link | type_debug is regex('^str|AnsibleUnicode|AnsibleUnsafeText$')
+              - alt.value.alternatives is defined
+              - alt.value.alternatives | type_debug == "list"
+          loop: "{{ alternatives_update  | dict2items }}"
+          loop_control:
+            loop_var: alt
+            label: "{{ alt.key }}"
+          when: alt.value.state == "present"
+
+        - name: Include checks for the lists of alternatives present
+          include_tasks: alternatives_checks.yml
+          loop: "{{ alternatives_update  | dict2items }}"
+          loop_control:
+            loop_var: alt
+            label: "{{ alt.key }}"
+          when: alt.value.state == "present"
 
       when: alternatives_update is defined
 
