@@ -5,7 +5,7 @@
     - name: Get the existing alternative values if they exist
       set_fact:
         alternatives_existing_path: "{{ existing_alternative.path | default('') }}"
-        alternatives_existing_priority: "{{ existing_alternative.priority | default('')}}"
+        alternatives_existing_priority: "{{ existing_alternative.priority | default('') }}"
       loop: "{{ ansible_local.alternatives[alt.key].alternatives }}"
       loop_control:
         loop_var: existing_alternative
@@ -64,7 +64,7 @@
       when:
         - ansible_local.alternatives[alt.key].alternatives is defined
         - alternatives_existing_priority is defined
-        - alternatives_existing_priority != alternative.priority
+        - alternatives_existing_priority | int != alternative.priority | int
 
   tags:
     - alternatives
