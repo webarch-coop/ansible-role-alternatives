@@ -5,7 +5,7 @@
     - name: Generate an array of alternatives present
       set_fact:
         alternatives_present: "{{ alternatives_present | default([]) }} + [ '{{ alt.key }}' ]"
-      when: alt.state == "present"
+      when: alt.value.state == "present"
       loop: "{{ alternatives_update  | dict2items }}"
       loop_control:
         loop_var: alt
@@ -19,7 +19,7 @@
     - name: Generate an array of alternatives absent
       set_fact:
         alternatives_absent: "{{ alternatives_absent | default([]) }} + [ '{{ alt.key }}' ]"
-      when: alt.state == "absent"
+      when: alt.value.state == "absent"
       loop: "{{ alternatives_update | dict2items }}"
       loop_control:
         loop_var: alt
