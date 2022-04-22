@@ -38,10 +38,6 @@
 
     - name: Install alternatives when existing alternatives are not defined
       ansible.builtin.command: "update-alternatives --install {{ alt.value.link }} {{ alt.key }} {{ alternative.path }} {{ alternative.priority }}"
-        name: "{{ alt.key }}"
-        link: "{{ alt.value.link }}"
-        path: "{{ alternative.path }}"
-        priority: "{{ alternative.priority }}"
       when: ansible_local.alternatives[alt.key].alternatives is not defined
 
     - name: Update alternative when existing alternative is defined but the link has changed
