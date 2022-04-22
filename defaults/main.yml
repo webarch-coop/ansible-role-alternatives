@@ -1,7 +1,8 @@
 ---
 alternatives: true
+alternative_facts: true
 alternatives_update:
-  - name: php
+  'php':
     state: present
     link: /usr/bin/php
     alternatives:
@@ -14,7 +15,7 @@ alternatives_update:
       - path: /usr/bin/php8.1
         state: present
         priority: 81
-  - name: phar
+  'phar':
     state: present
     link: /usr/bin/phar
     alternatives:
@@ -27,7 +28,7 @@ alternatives_update:
       - path: /usr/bin/phar8.1
         state: present
         priority: 81
-  - name: phar.phar
+  'phar.phar':
     state: present
     link: /usr/bin/phar.phar
     alternatives:
@@ -40,7 +41,7 @@ alternatives_update:
       - path: /usr/bin/phar.phar8.1
         state: present
         priority: 81
-  - name: php-fpm.sock
+  'php-fpm.sock':
     link: /run/php/php-fpm.sock
     state: present
     alternatives:

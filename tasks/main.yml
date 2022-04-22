@@ -2,9 +2,50 @@
 - name: Ansible update-alternatives
   block:
 
+    - name: Include check tasks
+      include_tasks: checks.yml
+
+    - name: Record the current state of the ansible_local.alternatives if defined
+      block:
+
+        - name: Set a variable for the existing ansible_local.alternatives is defined
+          set_fact:
+            alternative_previous_facts: "{{ ansible_local.alternatives }}"
+
+        - name: Debug the current ansible_local.alternative facts
+          debug:
+            var: ansible_local.alternative
+            verbosity: 2
+
+      when: ( ansible_local.alternatives is defined ) and ( ansible_local.alternatives != {} )
+
     - name: Include local facts tasks
       include_tasks: local_facts.yml
+      when: alternative_facts
 
+    - name: Update alternatives
+      block:
+
+        - name: Include update tasks for alternatives that need updating
+          include_tasks: update.yml
+          when: ( ( ansible_local.alternatives[alt] is defined ) and ( ansible_local.alternatives[alt] != alt ) ) or ( ansible_local.alternatives[alt] is not defined )
+          loop: "{{ alternatives_update | dict2items }}"
+          loop_control:
+            loop_var: alt
+            label: "{{ alt.key }}"
+
+      when: ( alternatives_update is defined ) and ( alternatives_update != {} )
+
+    - name: Reload ansible_local.alternative facts
+      meta: flush_handlers
+
+    - name: Debug the updated ansible_local.alternative facts when they have changed
+      debug:
+        var: ansible_local.alternative
+        verbosity: 2
+      when: ansible_local.alternative != alternative_previous_facts
+
+  when: alternatives
   tags:
     - alternatives
 ...

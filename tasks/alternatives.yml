@@ -1,0 +1,36 @@
+---
+- name: Generate lists of alternatives present and absent
+  block:
+
+    - name: Generate an array of alternatives present
+      set_fact:
+        alternatives_present: "{{ alternatives_present | default([]) }} + [ '{{ alt.key }}' ]"
+      when: alt.state == "present"
+      loop: "{{ alternatives_update  | dict2items }}"
+      loop_control:
+        loop_var: alt
+        label: "{{ alt.key }}"
+
+    - name: Debug alternatives present array
+      debug:
+        var: alternatives_present
+        verbosity: 2
+
+    - name: Generate an array of alternatives absent
+      set_fact:
+        alternatives_absent: "{{ alternatives_absent | default([]) }} + [ '{{ alt.key }}' ]"
+      when: alt.state == "absent"
+      loop: "{{ alternatives_update | dict2items }}"
+      loop_control:
+        loop_var: alt
+        label: "{{ alt.key }}"
+
+    - name: Debug alternatives absent array
+      debug:
+        var: alternatives_absent
+        verbosity: 2
+
+  when: ( alternatives_update is defined ) and ( alternatives_update != {} ) 
+  tags:
+    - alternatives
+...

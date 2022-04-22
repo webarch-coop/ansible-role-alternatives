@@ -1,0 +1,36 @@
+---
+- name: Update alternatives
+  block:
+
+    - name: "Alternative {{ alt.key }} absent"
+      ansible.builtin.command: "update-alternatives --remove-all {{ alt.key }}"
+      when: alt.value.state == "absent"
+
+    - name: "Updates alternatives for {{ alt.key }}"
+      block:
+
+        - name: "Remove alternative {{ alternative.path }} for {{ alt.key }}"
+          ansible.builtin.command: "update-alternatives --remove {{ alt.key }} {{ alternative.path }}"
+          when: alternative.state == "absent"
+          loop: "{{ alt.value.alternatives }}"
+          loop_control:
+            loop_var: alternative
+            label: "{{ alternative.path }}"
+
+        - name: "Update alternative {{ alternative.path }} with priority {{ alternative.priority }} for {{ alt.key }}"
+          community.general.alternatives:
+            name: "{{ alt.key }}"
+            link: "{{ alt.value.link }}"
+            path: "{{ alternative.path }}"
+            priority: "{{ alternative.priority }}"
+          when: alternative.state == "present"
+          loop: "{{ alt.value.alternatives }}"
+          loop_control:
+            loop_var: alternative
+            label: "{{ alternative.path }}"
+ 
+      when: alt.value.state == "present"
+
+  tags:
+    - alternatives
+...

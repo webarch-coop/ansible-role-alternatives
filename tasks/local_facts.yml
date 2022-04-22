@@ -26,32 +26,41 @@
         group: root
       register: alternatives_facts
 
-    - name: Generate an array of alternatives for the facts script
-      set_fact:
-        alternatives_names: "{{ alternatives_update | map(attribute='name') }}"
+    - name: Include tasks to generate alternatives present and alternatives absent tasks 
+      include_tasks: alternatives.yml
+      when: ( alternatives_update is defined ) and ( alternatives_update != {} )
 
-    - name: Debug alternatives
-      debug:
-        var: alternatives_names
-
-    - name: Ansible alternatives local facts config present
-      template:
-        src: alternatives.j2
-        dest: /etc/ansible/alternatives
+    - name: Alternatives present in facts config file
+      lineinfile:
+        path: /etc/ansible/alternatives
+        line: "{{ alt }}"
+        state: present
+        create: true
         mode: 0600
         owner: root
         group: root
-      register: alternatives_facts_config
+      loop: "{{ alternatives_present }}"
+      loop_control:
+        loop_var: alt
+        label: "{{ alt }}"
+      when: ( alternatives_present is defined ) and ( alternatives_present != [] )
+      notify: Update ansible_local
 
-    - name: Re-read Ansible local facts
-      ansible.builtin.setup:
-        filter: ansible_local
-      when: ( alternatives_facts.changed ) or ( alternatives_facts_config.changed )
-
-    - name: Print Ansible update-alternatives --query variables
-      debug:
-        msg: "{{ ansible_local.alternatives }}"
-        verbosity: 2
+    - name: Alternatives absent from facts config file
+      lineinfile:
+        path: /etc/ansible/alternatives
+        line: "{{ alt }}"
+        state: absent
+        create: true
+        mode: 0600
+        owner: root
+        group: root
+      loop: "{{ alternatives_absent }}"
+      loop_control:
+        loop_var: alt
+        label: "{{ alt }}"
+      when: ( alternatives_absent is defined ) and ( alternatives_absent != [] )
+      notify: Update ansible_local
 
   tags:
     - alternatives
