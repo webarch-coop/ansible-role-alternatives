@@ -26,7 +26,7 @@
           when: alternative.state == "present"
 
         - name: Set the link group to auto if was set to manual
-          ansible.builtin.command: "{{ update-alternatives --auto {{ alt.key }}"
+          ansible.builtin.command: "update-alternatives --auto {{ alt.key }}"
           when: ansible_local.alternatives[alt.key].status == "manual"
 
       when: alt.value.state == "present"
