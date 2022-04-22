@@ -17,37 +17,35 @@ else
   exit
 fi
 
-jo $(
+jo -a $(
   for sel in "${selections[@]}"
   do
-    jo -a $( 
-      if query=$(update-alternatives --query "${sel}")
-      then
-        declare -a alternatives=()
-        readarray -t alternatives < <(grep -e '^Alternative' <<< "${query}" | sed 's/Alternative: //')
-        declare -a priorities=()
-        readarray -t priorities < <(grep -e '^Priority' <<< "${query}" | sed 's/Priority: //')
-        jo state=present name="${sel}" link=$(
-          grep ^Link <<< "${query}" | sed 's/^Link: //'
-        ) status=$(
-          grep ^Status <<< "${query}" | sed 's/^Status: //'
-        ) value=$(
-          grep ^Value <<< "${query}" | sed 's/^Value: //'
-        ) best=$(
-          grep ^Best <<< "${query}" | sed 's/Best: //'
-        ) alternatives=$(
-          jo -a $(
-            i=0
-            while [[ "${i}" -lt "${#alternatives[@]}" ]]
-            do
-              jo state=present path="${alternatives[${i}]}" priority="${priorities[${i}]}" 
-              ((i++))
-            done
-          )
+    if query=$(update-alternatives --query "${sel}")
+    then
+      declare -a alternatives=()
+      readarray -t alternatives < <(grep -e '^Alternative' <<< "${query}" | sed 's/Alternative: //')
+      declare -a priorities=()
+      readarray -t priorities < <(grep -e '^Priority' <<< "${query}" | sed 's/Priority: //')
+      jo state=present name="${sel}" link=$(
+        grep ^Link <<< "${query}" | sed 's/^Link: //'
+      ) status=$(
+        grep ^Status <<< "${query}" | sed 's/^Status: //'
+      ) value=$(
+        grep ^Value <<< "${query}" | sed 's/^Value: //'
+      ) best=$(
+        grep ^Best <<< "${query}" | sed 's/Best: //'
+      ) alternatives=$(
+        jo -a $(
+          i=0
+          while [[ "${i}" -lt "${#alternatives[@]}" ]]
+          do
+            jo state=present path="${alternatives[${i}]}" priority="${priorities[${i}]}" 
+            ((i++))
+          done
         )
-      else
-        jo state=absent
-      fi
-    )
+      )
+    else
+      jo state=absent
+    fi
   done
 )
