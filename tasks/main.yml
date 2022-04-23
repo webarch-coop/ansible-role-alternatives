@@ -17,7 +17,7 @@
             var: ansible_local.alternatives
             verbosity: 2
 
-      when: ( ansible_local.alternatives is defined ) and ( ansible_local.alternatives != {} )
+      when: ( ansible_local.alternatives is defined ) and ( ansible_local.alternatives != [] )
 
     - name: Include local facts tasks
       include_tasks: local_facts.yml
@@ -28,13 +28,13 @@
 
         - name: Include update tasks for alternatives that need updating
           include_tasks: update.yml
-          when: ( ( ansible_local.alternatives[alt] is defined ) and ( ansible_local.alternatives[alt] != alt ) ) or ( ansible_local.alternatives[alt] is not defined )
-          loop: "{{ alternatives_update | dict2items }}"
+          # when: ( ( ansible_local.alternatives[alt] is defined ) and ( ansible_local.alternatives[alt] != alt ) ) or ( ansible_local.alternatives[alt] is not defined )
+          loop: "{{ alternatives_update }}"
           loop_control:
             loop_var: alt
-            label: "{{ alt.key }}"
+            label: "{{ alt }}"
 
-      when: ( alternatives_update is defined ) and ( alternatives_update != {} )
+      when: ( alternatives_update is defined ) and ( alternatives_update != [] )
 
     - name: Reload ansible_local.alternatives facts
       meta: flush_handlers

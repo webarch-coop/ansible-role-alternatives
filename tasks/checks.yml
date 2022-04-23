@@ -8,45 +8,62 @@
           - alternatives | type_debug == "bool"
           - alternative_facts | type_debug == "bool"
 
-    - name: Check alternatives_update dictionary
+    - name: Check alternatives_update list
       block:
 
-        - name: Check that alternatives_update is a dictionary
+        - name: Check that alternatives_update is a array
           assert:
             that:
-              - alternatives_update | type_debug == "dict"
+              - alternatives_update | type_debug == "list"
+
+        - name: Check alternative name
+          assert:
+            that:
+              - alt.name is defined
+              - alt.name | type_debug is regex('AnsibleUnicode|AnsibleUnsafeText|str')
+          loop: "{{ alternatives_update }}"
+          loop_control:
+            loop_var: alt
 
         - name: Check alternative state
           assert:
             that:
-              - alt.value.state is defined
-              - alt.value.state is regex('^absent|present$')
-          loop: "{{ alternatives_update  | dict2items }}"
+              - alt.state is defined
+              - alt.state is regex('^absent|present$')
+          loop: "{{ alternatives_update }}"
           loop_control:
             loop_var: alt
-            label: "{{ alt.key }}"
+            label: "{{ alt.name }}"
 
         - name: Check alternative link and alternatives when present
           assert:
             that:
               - alt.value.link is defined
               - alt.value.link is regex('^\/')
-              - alt.value.link | type_debug is regex('^str|AnsibleUnicode|AnsibleUnsafeText$')
+              - alt.value.link | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
               - alt.value.alternatives is defined
               - alt.value.alternatives | type_debug == "list"
-          loop: "{{ alternatives_update  | dict2items }}"
+          loop: "{{ alternatives_update }}"
           loop_control:
             loop_var: alt
-            label: "{{ alt.key }}"
-          when: alt.value.state == "present"
+            label: "{{ alt.name }}"
+          when: alt.state == "present"
+
+        - name: Include checks for the list of slaves present
+          include_tasks: slaves_checks.yml
+          loop: "{{ alternatives_update }}"
+          loop_control:
+            loop_var: slave
+            label: "{{ slave }}"
+          when: ( alt.state == "present" ) and ( alt.slaves is defined )
 
         - name: Include checks for the lists of alternatives present
           include_tasks: alternatives_checks.yml
-          loop: "{{ alternatives_update  | dict2items }}"
+          loop: "{{ alternatives_update }}"
           loop_control:
             loop_var: alt
-            label: "{{ alt.key }}"
-          when: alt.value.state == "present"
+            label: "{{ alt }}"
+          when: ( alt.state == "present" ) and ( alt.alternatives is defined )
 
       when: alternatives_update is defined
 

@@ -69,8 +69,8 @@
         group: root
 
     - name: Ansible alternatives local facts script present
-      template:
-        src: alternatives.fact.j2
+      copy:
+        src: alternatives.fact
         dest: /etc/ansible/facts.d/alternatives.fact
         mode: 0700
         owner: root

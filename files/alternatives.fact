@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
+
 # Ansible managed
 
-set -euo pipefail
-
-# Read selections fron a file since this file can't be written using the Ansible
-# template module as there is no way to alter the defult Jinja2 comment format
-# {# comment #} clashes with getting the the numbers of items in a Bash array
+# Read selections fron a file since we want to keep the list on the 
+# server and alternatves might have been added to it by importing
+# this role.
 
 if [[ -f "/etc/ansible/alternatives" ]]
 then
@@ -18,34 +17,18 @@ else
 fi
 
 jo -a $(
-  for sel in "${selections[@]}"
-  do
-    if query=$(update-alternatives --query "${sel}")
-    then
-      declare -a alternatives=()
-      readarray -t alternatives < <(grep -e '^Alternative' <<< "${query}" | sed 's/Alternative: //')
-      declare -a priorities=()
-      readarray -t priorities < <(grep -e '^Priority' <<< "${query}" | sed 's/Priority: //')
-      jo name="${sel}" state=present link=$(
-        grep ^Link <<< "${query}" | sed 's/^Link: //'
-      ) status=$(
-        grep ^Status <<< "${query}" | sed 's/^Status: //'
-      ) value=$(
-        grep ^Value <<< "${query}" | sed 's/^Value: //'
-      ) best=$(
-        grep ^Best <<< "${query}" | sed 's/Best: //'
-      ) alternatives=$(
-        jo -a $(
-          i=0
-          while [[ "${i}" -lt "${#alternatives[@]}" ]]
-          do
-            jo state=present path="${alternatives[${i}]}" priority="${priorities[${i}]}" 
-            ((i++))
-          done
-        )
-      )
-    else
-      jo state=absent
-    fi
-  done
+  if [[ "${#selections[@]}" -gt "0" ]]
+  then
+    for sel in "${selections[@]}"
+    do
+      if query=$(update-alternatives --query "${sel}")
+      then
+        jc update-alternatives --query "${sel}"
+      else
+        jo state=absent
+      fi
+    done
+  else
+    jo state=absent
+  fi
 )

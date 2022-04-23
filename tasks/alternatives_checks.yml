@@ -9,7 +9,7 @@
           - alternative.state is regex('^present|absent$')
           - alternative.path is defined
           - alternative.path is regex('^\/')
-          - alternative.path | type_debug is regex('^str|AnsibleUnicode|AnsibleUnsafeText$')
+          - alternative.path | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
       loop: "{{ alt.value.alternatives }}"
       loop_control:
         loop_var: alternative
