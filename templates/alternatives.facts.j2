@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+# {{ ansible_managed }}
+
+# Read selections fron a file since we want to keep the list on the 
+# server and alternatves might have been added to it by importing
+# this role.
+
+if [[ -f "/etc/ansible/alternatives" ]]
+then
+  declare -a selections=()
+  mapfile -t selections < <(grep -v '^#' /etc/ansible/alternatives)
+else
+  echo "Config file /etc/ansible/alternatives not found" >&2
+  jo state=absent
+  exit
+fi
+
+jo -a $(
+  if [[ "${#selections[@]}" -gt "0" ]]
+  then
+    for sel in "${selections[@]}"
+    do
+      if query=$(update-alternatives --query "${sel}")
+      then
+        jc update-alternatives --query "${sel}"
+      else
+        jo state=absent
+      fi
+    done
+  else
+    jo state=absent
+  fi
+)

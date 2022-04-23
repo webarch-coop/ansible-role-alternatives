@@ -6,25 +6,22 @@
       ansible.builtin.apt:
         pkg:
           - jo
+          - jc
         state: present
 
-    - name: Ansible facts.d directory present
-      ansible.builtin.file:
-        path: /etc/ansible/facts.d
-        recurse: true
-        state: directory
-        mode: 0700
-        owner: root
-        group: root
+    - name: Check jc
+      ansible.builtin.command: jc -a
+      check_mode: false
+      changed_when: false
+      register: jc_a
 
-    - name: Ansible alternatives local facts script present
-      copy:
-        src: alternatives.fact
-        dest: /etc/ansible/facts.d/alternatives.fact
-        mode: 0700
-        owner: root
-        group: root
-      register: alternatives_facts
+    - name: Set a fact for the existing version information
+      ansible.builtin.set_fact:
+        jc_existing_json: "{{ jc_a.stdout | from_json }}"
+
+    - name: Set a fact for the existing version information
+      ansible.builtin.set_fact:
+        jc_existing: "{{ jc_existing_json.version | string }}"
 
     - name: Include tasks to generate alternatives present and alternatives absent tasks
       include_tasks: alternatives.yml
@@ -60,6 +57,24 @@
         loop_var: alt
         label: "{{ alt }}"
       when: ( alternatives_absent is defined ) and ( alternatives_absent != [] )
+      notify: Update ansible_local
+
+    - name: Ansible facts.d directory present
+      ansible.builtin.file:
+        path: /etc/ansible/facts.d
+        recurse: true
+        state: directory
+        mode: 0700
+        owner: root
+        group: root
+
+    - name: Ansible alternatives local facts script present
+      template:
+        src: alternatives.fact.j2
+        dest: /etc/ansible/facts.d/alternatives.fact
+        mode: 0700
+        owner: root
+        group: root
       notify: Update ansible_local
 
   tags:
