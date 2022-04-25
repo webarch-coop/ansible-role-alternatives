@@ -2,7 +2,7 @@
 - name: Check the alternatives list
   block:
 
-    - name: "Check alternatives for {{ alt.key }}"
+    - name: "Check alternatives for {{ alt.name }}"
       ansible.builtin.assert:
         that:
           - alternative.state is defined
@@ -15,7 +15,7 @@
         loop_var: alternative
         label: "{{ alternative.path }}"
 
-    - name: "Check alternatives for {{ alt.key }}"
+    - name: "Check alternatives for {{ alt.name }}"
       ansible.builtin.include_tasks: alternative_checks.yml
       when: alternative.state == "present"
       loop: "{{ alt.value.alternatives }}"
