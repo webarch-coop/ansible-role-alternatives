@@ -30,7 +30,7 @@
               - alt_update.link | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
 
         - name: Include checks for alternative slaves when present
-          include_tasks: check_slaves.yml
+          include_tasks: check_slave.yml
           loop: "{{ alt_update.slaves }}"
           loop_control:
             loop_var: slave
