@@ -11,11 +11,11 @@
 
         - name: "Include update tasks for slaves for {{ alt_update.name }}"
           include_tasks: update_slave.yml
-          loop: "{{ slaves }}"
+          loop: "{{ alt_update.slaves }}"
           loop_control:
             loop_var: alternative
             label: "{{ alternative.path }}"
-          when: alternative.state == "absent"
+          when: alt_update.slaves is defined 
 
         - name: Debug alt.value.alternatives
           debug:

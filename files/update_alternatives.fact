@@ -23,9 +23,9 @@ jo -a $(
     do
       if alternative=$(jc update-alternatives --query "${sel}")
       then
-        echo "${alternative}"
+        jo selection="${sel}" state=present "${sel}"="${alternative}"
       else
-        jo state=absent
+        jo selection="${sel}" state=absent
       fi
     done
   else
