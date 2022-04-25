@@ -10,7 +10,7 @@
           - alternative.path is defined
           - alternative.path is regex('^\/')
           - alternative.path | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
-      loop: "{{ alt.value.alternatives }}"
+      loop: "{{ alt.alternatives }}"
       loop_control:
         loop_var: alternative
         label: "{{ alternative.path }}"
@@ -18,7 +18,7 @@
     - name: "Check alternatives for {{ alt.name }}"
       ansible.builtin.include_tasks: alternative_checks.yml
       when: alternative.state == "present"
-      loop: "{{ alt.value.alternatives }}"
+      loop: "{{ alt.alternatives }}"
       loop_control:
         loop_var: alternative
         label: "{{ alternative.path }}"
