@@ -40,7 +40,7 @@
             label: "{{ alt.alternative }}"
           when: ( alt_update.alternatives is defined ) and (alt_update.alternatives != [] )
 
-      when: alt.state == "present"
+      when: alt_update.state == "present"
 
   tags:
     - alternatives
