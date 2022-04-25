@@ -15,7 +15,7 @@
           loop_control:
             loop_var: alternative
             label: "{{ alternative.path }}"
-          when: alt_update.slaves is defined 
+          when: alt_update.slaves is defined
 
         - name: Debug alt.value.alternatives
           debug:
