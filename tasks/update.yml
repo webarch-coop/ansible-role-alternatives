@@ -2,40 +2,41 @@
 - name: Update alternatives
   block:
 
-    - name: "Alternative {{ alt.key }} absent"
-      ansible.builtin.command: "update-alternatives --remove-all {{ alt.key }}"
-      when: alt.value.state == "absent"
+    - name: "Alternative {{ alt_update.name }} absent"
+      ansible.builtin.command: "update-alternatives --remove-all {{ alt_update.name }}"
+      when: ( alt_update.state is defined ) and ( alt_update.state == "absent" )
 
-    - name: "Updates alternatives for {{ alt.key }}"
+    - name: Updates alternatives
       block:
 
-        - name: Remove alternatives
-          ansible.builtin.command: "update-alternatives --remove {{ alt.key }} {{ alternative.path }}"
-          loop: "{{ alt.value.alternatives }}"
-          loop_control:
-            loop_var: alternative
-            label: "{{ alternative.path }}"
-          when: alternative.state == "absent"
+# all the following need rewriting
+#        - name: "Include update tasks for slaves for {{ alt_update.name }}"
+#          include_tasks: update_slaves.yml
+#          loop: "{{ slaves }}"
+#          loop_control:
+#            loop_var: alternative
+#            label: "{{ alternative.path }}"
+#          when: alternative.state == "absent"
+#
+#        - name: Debug alt.value.alternatives
+#          debug:
+#            var: alt.value.alternatives
+#            verbosity: 2
+#          when: alt.value.alternatives is defined
+#
+#        - name: Include update alternative tasks
+#          ansible.builtin.include_tasks: update_alternative.yml
+#          loop: "{{ alt.value.alternatives }}"
+#          loop_control:
+#            loop_var: alternative
+#            label: "{{ alternative.path }}"
+#          when: alternative.state == "present"
+#
+#        - name: Set the link group to auto if was set to manual
+#          ansible.builtin.command: "update-alternatives --auto {{ alt.key }}"
+#          when: ansible_local.alternatives[alt.key].status == "manual"
 
-        - name: Debug alt.value.alternatives
-          debug:
-            var: alt.value.alternatives
-            verbosity: 2
-          when: alt.value.alternatives is defined
-
-        - name: Include update alternative tasks
-          ansible.builtin.include_tasks: update_alternative.yml
-          loop: "{{ alt.value.alternatives }}"
-          loop_control:
-            loop_var: alternative
-            label: "{{ alternative.path }}"
-          when: alternative.state == "present"
-
-        - name: Set the link group to auto if was set to manual
-          ansible.builtin.command: "update-alternatives --auto {{ alt.key }}"
-          when: ansible_local.alternatives[alt.key].status == "manual"
-
-      when: alt.value.state == "present"
+      when: ( alt_update.state is not defined ) or ( alt_update.state == "present" )
 
   tags:
     - alternatives

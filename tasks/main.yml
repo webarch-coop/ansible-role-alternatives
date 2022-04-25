@@ -31,8 +31,8 @@
           # when: ( ( ansible_local.alternatives[alt] is defined ) and ( ansible_local.alternatives[alt] != alt ) ) or ( ansible_local.alternatives[alt] is not defined )
           loop: "{{ alternatives_update }}"
           loop_control:
-            loop_var: alt
-            label: "{{ alt }}"
+            loop_var: alt_update
+            label: "{{ alt_update }}"
 
       when: ( alternatives_update is defined ) and ( alternatives_update != [] )
 
