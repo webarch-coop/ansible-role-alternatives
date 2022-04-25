@@ -16,7 +16,7 @@ alternatives_update:
         slaves:
           - name: php.1.gz
             state: present
-            path: /usr/share/man/man1/php7.4.1.gz 
+            path: /usr/share/man/man1/php7.4.1.gz
       - alternative: /usr/bin/php8.0
         state: present
         priority: 80
@@ -30,14 +30,14 @@ alternatives_update:
         slaves:
           - name: php.1.gz
             state: present
-            path: i/usr/share/man/man1/php8.1.1.gz
+            path: /usr/share/man/man1/php8.1.1.gz
   - name: phar
     state: present
     link: /usr/bin/phar
     slaves:
       - name: phar.1.gz
         state: present
-        path: /usr/share/man/man1/phar.1.gz 
+        path: /usr/share/man/man1/phar.1.gz
     alternatives:
       - alternative: /usr/bin/phar7.4
         state: present

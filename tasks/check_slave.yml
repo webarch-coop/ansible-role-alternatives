@@ -2,18 +2,23 @@
 - name: Check alternatve slaves
   block:
 
+    - name: Debug slave
+      debug:
+        var: slave
+        verbosity: 2
+
     - name: Check slave name is defined
       ansible.builtin.assert:
         that:
           - slave.name is defined
           - slave.name | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
- 
+
     - name: Check slave state is defined
       ansible.builtin.assert:
         that:
           - slave.state is defined
           - slave.state is regex('^present|absent$')
- 
+
     - name: Check slave path
       block:
 

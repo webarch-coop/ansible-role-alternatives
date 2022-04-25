@@ -2,6 +2,11 @@
 - name: Checks for present alternative
   block:
 
+    - name: Debug alternative
+      debug:
+        var: alt
+        verbosity: 2
+
     - name: Check alternative name
       assert:
         that:
@@ -44,7 +49,7 @@
               - alt.slaves | type_debug == "list"
 
         - name: Include checks for alternative slaves when present
-          include_tasks: check_slaves.yml
+          include_tasks: check_slave.yml
           loop: "{{ alt.slaves }}"
           loop_control:
             loop_var: slave

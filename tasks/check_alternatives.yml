@@ -1,6 +1,11 @@
 ---
-- name: Check the alternatives list
+- name: Check the alternatives
   block:
+
+    - name: Debug alternatives
+      debug:
+        var: alt_update
+        verbosity: 2
 
     - name: Check alternative name
       assert:

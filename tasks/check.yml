@@ -11,6 +11,11 @@
     - name: Check alternatives_update list
       block:
 
+        - name: Debug alternatives to update
+          debug:
+            var: alternatives_update
+            verbosity: 2
+
         - name: Check that alternatives_update is a array
           assert:
             that:
