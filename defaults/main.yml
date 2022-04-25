@@ -8,7 +8,7 @@ alternatives_update:
     slaves:
       - name: php.1.gz
         state: present
-        link: /usr/share/man/man1/php.1.gz
+        path: /usr/share/man/man1/php.1.gz
     alternatives:
       - alternative: /usr/bin/php7.4
         state: present
