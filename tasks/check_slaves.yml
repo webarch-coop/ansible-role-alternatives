@@ -2,24 +2,38 @@
 - name: Check alternatve slaves
   block:
 
-    - name: Check name is defined
+    - name: Check slave name is defined
       ansible.builtin.assert:
         that:
           - slave.name is defined
           - slave.name | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
  
-    - name: Check state is defined
+    - name: Check slave state is defined
       ansible.builtin.assert:
         that:
           - slave.state is defined
           - slave.state is regex('^present|absent$')
  
-    - name: Check path is defined
-      ansible.builtin.assert:
-        that:
-          - slave.path is defined
-          - slave.path is regex('^\/')
-          - slave.path | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
+    - name: Check slave path
+      block:
+
+        - name: Check slave path is defined
+          ansible.builtin.assert:
+            that:
+              - slave.path is defined
+              - slave.path is regex('^\/')
+              - slave.path | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
+
+        - name: Check slave path exists
+          stat:
+            path: "{{ slave.path }}"
+          register: alternatives_slave_path
+
+        - name: Fail if slave path doesn't exist"
+          assert:
+            that:
+              - alternatives_slave_path.stat.exists
+
       when: slave.state == "present"
 
   tags:
