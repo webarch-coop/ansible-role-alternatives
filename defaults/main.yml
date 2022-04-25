@@ -7,6 +7,7 @@ alternatives_update:
     link: /usr/bin/php
     slaves:
       - name: php.1.gz
+        state: present
         link: /usr/share/man/man1/php.1.gz
     alternatives:
       - alternative: /usr/bin/php7.4
@@ -14,24 +15,28 @@ alternatives_update:
         priority: 74
         slaves:
           - name: php.1.gz
+            state: present
             path: /usr/share/man/man1/php7.4.1.gz 
       - alternative: /usr/bin/php8.0
         state: present
         priority: 80
         slaves:
           - name: php.1.gz
+            state: present
             path: /usr/share/man/man1/php8.0.1.gz
       - alternative: /usr/bin/php8.1
         state: present
         priority: 81
         slaves:
           - name: php.1.gz
+            state: present
             path: i/usr/share/man/man1/php8.1.1.gz
   - name: phar
     state: present
     link: /usr/bin/phar
     slaves:
       - name: phar.1.gz
+        state: present
         path: /usr/share/man/man1/phar.1.gz 
     alternatives:
       - alternative: /usr/bin/phar7.4
@@ -39,24 +44,28 @@ alternatives_update:
         priority: 74
         slaves:
           - name: phar.1.gz
+            state: present
             path: /usr/share/man/man1/phar7.4.1.gz
       - alternative: /usr/bin/phar8.0
         state: present
         priority: 80
         slaves:
           - name: phar.1.gz
+            state: present
             path: /usr/share/man/man1/phar8.0.1.gz
       - alternative: /usr/bin/phar8.1
         state: present
         priority: 81
         slaves:
           - name: phar.1.gz
+            state: present
             path: /usr/share/man/man1/phar8.1.1.gz
   - name: phar.phar
     state: present
     link: /usr/bin/phar.phar
     slaves:
       - name: phar.phar.1.gz
+        state: present
         path: /usr/share/man/man1/phar.phar.1.gz
     alternatives:
       - alternative: /usr/bin/phar.phar7.4
@@ -64,18 +73,21 @@ alternatives_update:
         priority: 74
         slaves:
           - name: phar.phar.1.gz
+            state: present
             path: /usr/share/man/man1/phar.phar7.4.1.gz
       - alternative: /usr/bin/phar.phar8.0
         state: present
         priority: 80
         slaves:
           - name: phar.phar.1.gz
+            state: present
             path: /usr/share/man/man1/phar.phar8.0.1.gz
       - alternative: /usr/bin/phar.phar8.1
         state: present
         priority: 81
         slaves:
           - name: phar.phar.1.gz
+            state: present
             path: /usr/share/man/man1/phar.phar8.1.1.gz
   - name: php-fpm.sock
     link: /run/php/php-fpm.sock
