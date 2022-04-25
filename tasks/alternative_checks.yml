@@ -2,21 +2,56 @@
 - name: Checks for present alternative
   block:
 
-    - name: "Check alternative path {{ alternative.path }} for {{ alt.key }}"
-      stat:
-        path: "{{ alternative.path }}"
-      register: alternatives_alternative_path
-
-    - name: "Fail if {{ alternative.path }} for {{ alt.key }} doesn't exist"
+    - name: Check alternative name
       assert:
         that:
-          - alternatives_alternative_path.stat.exists
+          - alt.alternative is defined
+          - alt.alternative | type_debug is regex('AnsibleUnicode|AnsibleUnsafeText|str')
 
-    - name: "Check alternative priority for {{ alternative.path }} for {{ alt.key }}"
+    - name: Check alternative state
       assert:
         that:
-          - alternative.priority | type_debug == "int"
-          - alternative.priority is regex('^[0-9]{1,4}$')
+          - alt.state is defined
+          - alt.state is regex('^present|absent$')
+
+    - name: Check alternative link
+      block:
+
+        - name: Check alternative link exists
+          stat:
+            path: "{{ alt.alternative }}"
+          register: alternatives_alternative_path
+
+        - name: Fail if alternative path doesn't exist"
+          assert:
+            that:
+              - alternatives_alternative_path.stat.exists
+
+     when: alt.state == "present"
+
+    - name: Check alternative priority
+      assert:
+        that:
+          - alt.priority | type_debug == "int"
+          - alt.priority is regex('^[0-9]{1,4}$')
+
+    - name: Check alternative slaves
+      block:
+
+        - name: Check that alternative slaves is a array
+          assert:
+            that:
+              - alt.slaves | type_debug == "list"
+
+        - name: Include checks for alternative slaves when present
+          include_tasks: check_slaves.yml
+          loop: "{{ alt.slaves }}"
+          loop_control:
+            loop_var: slave
+            label: "{{ slave.name }}"
+          when: alt.slaves != []
+
+      when: alt.slaves is defined
 
   tags:
     - alternatives

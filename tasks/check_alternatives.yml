@@ -1,0 +1,47 @@
+---
+- name: Check the alternatives list
+  block:
+
+    - name: Check alternative name
+      assert:
+        that:
+          - alt_update.name is defined
+          - alt_update.name | type_debug is regex('AnsibleUnicode|AnsibleUnsafeText|str')
+
+    - name: Check alternative state
+      ansible.builtin.assert:
+        that:
+          - alt_update.state is defined
+          - alt_update.state is regex('^present|absent$')
+
+    - name: Checks when alternative is present
+      block:
+
+        - name: Check alternative link
+          ansible.builtin.assert:
+            that:
+              - alt_update.link is defined
+              - alt_update.link is regex('^\/')
+              - alt_update.link | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
+
+        - name: Include checks for alternative slaves when present
+          include_tasks: check_slaves.yml
+          loop: "{{ alt_update.slaves }}"
+          loop_control:
+            loop_var: slave
+            label: "{{ slave.name }}"
+          when: ( alt_update.slaves is defined ) and (alt_update.slaves != [] )
+
+        - name: Include checks for alternative alternatives when present
+          include_tasks: check_alternative.yml
+          loop: "{{ alt_update.alternative }}"
+          loop_control:
+            loop_var: alt
+            label: "{{ alt.alternative }}"
+          when: ( alt_update.alternatives is defined ) and (alt_update.alternatives != [] )
+
+      when: alt.state == "present"
+
+  tags:
+    - alternatives
+...

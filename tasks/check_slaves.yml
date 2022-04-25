@@ -1,0 +1,27 @@
+---
+- name: Check alternatve slaves
+  block:
+
+    - name: Check name is defined
+      ansible.builtin.assert:
+        that:
+          - slave.name is defined
+          - slave.name | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
+ 
+    - name: Check state is defined
+      ansible.builtin.assert:
+        that:
+          - slave.state is defined
+          - slave.state is regex('^present|absent$')
+ 
+    - name: Check path is defined
+      ansible.builtin.assert:
+        that:
+          - slave.path is defined
+          - slave.path is regex('^\/')
+          - slave.path | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
+      when: slave.state == "present"
+
+  tags:
+    - alternatives
+...

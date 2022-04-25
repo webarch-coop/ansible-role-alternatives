@@ -3,7 +3,7 @@
   block:
 
     - name: Include check tasks
-      include_tasks: checks.yml
+      include_tasks: check.yml
 
     - name: Record the current state of the ansible_local.alternatives if defined
       block:

@@ -1,0 +1,30 @@
+---
+- name: Check alternatives variables
+  block:
+
+    - name: Check that alternatives and alternative_facts are booleans
+      ansible.builtin.assert:
+        that:
+          - alternatives | type_debug == "bool"
+          - alternative_facts | type_debug == "bool"
+
+    - name: Check alternatives_update list
+      block:
+
+        - name: Check that alternatives_update is a array
+          assert:
+            that:
+              - alternatives_update | type_debug == "list"
+
+        - name: Include checks for the alternatives present
+          include_tasks: check_alternatives.yml
+          loop: "{{ alternatives_update }}"
+          loop_control:
+            loop_var: alt_update
+            label: "{{ alt_update }}"
+
+      when: alternatives_update is defined
+
+  tags:
+    - alternatives
+...
