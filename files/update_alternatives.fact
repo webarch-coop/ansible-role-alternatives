@@ -21,9 +21,9 @@ jo -a $(
   then
     for sel in "${selections[@]}"
     do
-      if query=$(update-alternatives --query "${sel}")
+      if alternative=$(jc update-alternatives --query "${sel}")
       then
-        jc update-alternatives --query "${sel}"
+        echo "${alternative}"
       else
         jo state=absent
       fi

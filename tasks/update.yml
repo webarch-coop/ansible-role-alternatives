@@ -9,32 +9,31 @@
     - name: Updates alternatives
       block:
 
-# all the following need rewriting
-#        - name: "Include update tasks for slaves for {{ alt_update.name }}"
-#          include_tasks: update_slaves.yml
-#          loop: "{{ slaves }}"
-#          loop_control:
-#            loop_var: alternative
-#            label: "{{ alternative.path }}"
-#          when: alternative.state == "absent"
-#
-#        - name: Debug alt.value.alternatives
-#          debug:
-#            var: alt.value.alternatives
-#            verbosity: 2
-#          when: alt.value.alternatives is defined
-#
-#        - name: Include update alternative tasks
-#          ansible.builtin.include_tasks: update_alternative.yml
-#          loop: "{{ alt.value.alternatives }}"
-#          loop_control:
-#            loop_var: alternative
-#            label: "{{ alternative.path }}"
-#          when: alternative.state == "present"
-#
-#        - name: Set the link group to auto if was set to manual
-#          ansible.builtin.command: "update-alternatives --auto {{ alt.key }}"
-#          when: ansible_local.alternatives[alt.key].status == "manual"
+        - name: "Include update tasks for slaves for {{ alt_update.name }}"
+          include_tasks: update_slaves.yml
+          loop: "{{ slaves }}"
+          loop_control:
+            loop_var: alternative
+            label: "{{ alternative.path }}"
+          when: alternative.state == "absent"
+
+        - name: Debug alt.value.alternatives
+          debug:
+            var: alt.value.alternatives
+            verbosity: 2
+          when: alt.value.alternatives is defined
+
+        - name: Include update alternative tasks
+          ansible.builtin.include_tasks: update_alternative.yml
+          loop: "{{ alt.value.alternatives }}"
+          loop_control:
+            loop_var: alternative
+            label: "{{ alternative.path }}"
+          when: alternative.state == "present"
+
+        - name: Set the link group to auto if was set to manual
+          ansible.builtin.command: "update-alternatives --auto {{ alt.key }}"
+          when: ansible_local.alternatives[alt.key].status == "manual"
 
       when: ( alt_update.state is not defined ) or ( alt_update.state == "present" )
 

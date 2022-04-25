@@ -71,8 +71,8 @@
 
     - name: Ansible alternatives local facts script present
       copy:
-        src: alternatives.fact
-        dest: /etc/ansible/facts.d/alternatives.fact
+        src: update_alternatives.fact
+        dest: /etc/ansible/facts.d/update_alternatives.fact
         mode: 0700
         owner: root
         group: root
