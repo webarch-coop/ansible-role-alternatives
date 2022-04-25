@@ -27,7 +27,7 @@
             that:
               - alternatives_alternative_path.stat.exists
 
-     when: alt.state == "present"
+      when: alt.state == "present"
 
     - name: Check alternative priority
       assert:
