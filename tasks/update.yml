@@ -10,7 +10,7 @@
       block:
 
         - name: "Include update tasks for slaves for {{ alt_update.name }}"
-          include_tasks: update_slaves.yml
+          include_tasks: update_slave.yml
           loop: "{{ slaves }}"
           loop_control:
             loop_var: alternative
