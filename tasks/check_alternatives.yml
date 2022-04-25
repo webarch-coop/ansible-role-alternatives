@@ -16,8 +16,8 @@
     - name: Check alternative state
       ansible.builtin.assert:
         that:
-          - alt_update.state is defined
           - alt_update.state is regex('^present|absent$')
+      when: alt_update.state is defined
 
     - name: Checks when alternative is present
       block:

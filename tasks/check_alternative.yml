@@ -16,8 +16,8 @@
     - name: Check alternative state
       assert:
         that:
-          - alt.state is defined
           - alt.state is regex('^present|absent$')
+      when: alt.state is defined
 
     - name: Check alternative link
       block:
@@ -32,7 +32,7 @@
             that:
               - alternatives_alternative_path.stat.exists
 
-      when: alt.state == "present"
+      when: ( alt.state is not defined ) or ( alt.state == "present" )
 
     - name: Check alternative priority
       assert:

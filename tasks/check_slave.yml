@@ -16,8 +16,8 @@
     - name: Check slave state is defined
       ansible.builtin.assert:
         that:
-          - slave.state is defined
           - slave.state is regex('^present|absent$')
+      when: slave.state is defined
 
     - name: Check slave path
       block:
@@ -39,7 +39,7 @@
             that:
               - alternatives_slave_path.stat.exists
 
-      when: slave.state == "present"
+      when: ( slave.state is not defined ) or ( slave.state == "present" )
 
   tags:
     - alternatives
