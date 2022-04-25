@@ -4,7 +4,7 @@
 
     - name: Generate an array of alternatives present
       set_fact:
-        alternatives_present: "{{ alternatives_present | default([]) }} + [ '{{ alt.name }}' ]"
+        alternatives_present: "{{ alternatives_present | default([]) }} + [ '{{ alt_update.name }}' ]"
       when: ( alt_update.state is not defined ) or ( alt_update.state == "present" )
       loop: "{{ alternatives_update }}"
       loop_control:
@@ -19,7 +19,7 @@
 
     - name: Generate an array of alternatives absent
       set_fact:
-        alternatives_absent: "{{ alternatives_absent | default([]) }} + [ '{{ alt.name }}' ]"
+        alternatives_absent: "{{ alternatives_absent | default([]) }} + [ '{{ alt_update.name }}' ]"
       when: ( alt_update.state is defined ) and ( alt_update.state == "absent" )
       loop: "{{ alternatives_update }}"
       loop_control:
