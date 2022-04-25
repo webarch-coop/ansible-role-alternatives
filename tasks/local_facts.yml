@@ -17,16 +17,12 @@
 
     - name: Set a fact for the jc information
       ansible.builtin.set_fact:
-        alternatives_jc_json: "{{ jc_a.stdout | from_json }}"
-
-    - name: Set a fact for the existing version of jc
-      ansible.builtin.set_fact:
-        alternatives_jc: "{{ jc_existing_json.version | string }}"
+        alternatives_jc: "{{ jc_a.stdout | from_json }}"
 
     # - name: The version of jc needs to be 1.18.7 or greater
     #   assert:
     #     that:
-    #       - alternatives_jc is version('1.18.7', '>=')
+    #       - alternatives_jc_json.version | string is version('1.18.7', '>=')
 
     - name: Include tasks to generate alternatives present and alternatives absent tasks
       include_tasks: alternatives.yml
