@@ -34,7 +34,7 @@
 
         - name: Include checks for alternative alternatives when present
           include_tasks: check_alternative.yml
-          loop: "{{ alt_update.alternative }}"
+          loop: "{{ alt_update.alternatives }}"
           loop_control:
             loop_var: alt
             label: "{{ alt.alternative }}"
