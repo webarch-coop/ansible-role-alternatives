@@ -35,12 +35,21 @@
             loop_var: alt
             label: "{{ alt.name }}"
 
-        - name: Check alternative link and alternatives when present
+        - name: Check alternative link when present
           assert:
             that:
               - alt.value.link is defined
               - alt.value.link is regex('^\/')
               - alt.value.link | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
+          loop: "{{ alternatives_update }}"
+          loop_control:
+            loop_var: alt
+            label: "{{ alt.name }}"
+          when: alt.state == "present"
+
+        - name: Check alternative alternatives when present
+          assert:
+            that:
               - alt.value.alternatives is defined
               - alt.value.alternatives | type_debug == "list"
           loop: "{{ alternatives_update }}"
