@@ -3,7 +3,7 @@
   block:
 
     - name: Get the existing alternative values if they exist
-      set_fact:
+      ansible.builtin.set_fact:
         alternatives_existing_path: "{{ existing_alternative.path | default('') }}"
         alternatives_existing_priority: "{{ existing_alternative.priority | default('') }}"
       loop: "{{ ansible_local.alternatives[alt.key].alternatives }}"
@@ -15,24 +15,24 @@
         - existing_alternative.path == alternative.path
 
     - name: Debug existing alternative path
-      debug:
+      ansible.builtin.debug:
         var: alternatives_existing_path
         verbosity: 2
       when: alternatives_existing_path is defined
 
     - name: Debug proposed alternative path
-      debug:
+      ansible.builtin.debug:
         var: alternative.path
         verbosity: 2
 
     - name: Debug existing alternative path
-      debug:
+      ansible.builtin.debug:
         var: alternatives_existing_priority
         verbosity: 2
       when: alternatives_existing_priority is defined
 
     - name: Debug proposed alternative priority
-      debug:
+      ansible.builtin.debug:
         var: alternative.priority
         verbosity: 2
 

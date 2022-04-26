@@ -3,7 +3,7 @@
   block:
 
     - name: Debug slave
-      debug:
+      ansible.builtin.debug:
         var: slave
         verbosity: 2
 
@@ -20,7 +20,7 @@
       when: slave.state is defined
 
     - name: Check slave path
-      include_tasks: check_path.yml
+      ansible.builtin.include_tasks: check_path.yml
       vars:
         path: "{{ slave.path }}"
       when: ( slave.state is not defined ) or ( slave.state == "present" )

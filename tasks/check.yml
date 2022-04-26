@@ -12,17 +12,17 @@
       block:
 
         - name: Debug alternatives to update
-          debug:
+          ansible.builtin.debug:
             var: alternatives_update
             verbosity: 2
 
         - name: Check that alternatives_update is a array
-          assert:
+          ansible.builtin.assert:
             that:
               - alternatives_update | type_debug == "list"
 
         - name: Include checks for the alternatives present if they don't match existing alternatives
-          include_tasks: check_alternatives.yml
+          ansible.builtin.include_tasks: check_alternatives.yml
           when: alt_update != ansible_local.update_alternatives.selections[alt_update.name]
           loop: "{{ alternatives_update }}"
           loop_control:

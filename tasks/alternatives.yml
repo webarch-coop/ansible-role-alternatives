@@ -3,7 +3,7 @@
   block:
 
     - name: Generate an array of alternatives present
-      set_fact:
+      ansible.builtin.set_fact:
         alternatives_present: "{{ alternatives_present | default([]) }} + [ '{{ alt_update.name }}' ]"
       when: ( alt_update.state is not defined ) or ( alt_update.state == "present" )
       loop: "{{ alternatives_update }}"
@@ -12,13 +12,13 @@
         label: "{{ alt_update.name }}"
 
     - name: Debug alternatives present array
-      debug:
+      ansible.builtin.debug:
         var: alternatives_present
         verbosity: 2
       when: alternatives_present is defined
 
     - name: Generate an array of alternatives absent
-      set_fact:
+      ansible.builtin.set_fact:
         alternatives_absent: "{{ alternatives_absent | default([]) }} + [ '{{ alt_update.name }}' ]"
       when: ( alt_update.state is defined ) and ( alt_update.state == "absent" )
       loop: "{{ alternatives_update }}"
@@ -27,7 +27,7 @@
         label: "{{ alt_update.name }}"
 
     - name: Debug alternatives absent array
-      debug:
+      ansible.builtin.debug:
         var: alternatives_absent
         verbosity: 2
       when: alternatives_absent is defined

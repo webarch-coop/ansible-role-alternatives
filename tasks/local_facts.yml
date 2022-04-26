@@ -25,11 +25,11 @@
     #       - alternatives_jc_json.version | string is version('1.18.7', '>=')
 
     - name: Include tasks to generate alternatives present and alternatives absent tasks
-      include_tasks: alternatives.yml
+      ansible.builtin.include_tasks: alternatives.yml
       when: ( alternatives_update is defined ) and ( alternatives_update != {} )
 
     - name: Alternatives present in facts config file
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/ansible/alternatives
         line: "{{ alt }}"
         state: present
@@ -45,7 +45,7 @@
       notify: Update ansible_local
 
     - name: Alternatives absent from facts config file
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/ansible/alternatives
         line: "{{ alt }}"
         state: absent
@@ -70,7 +70,7 @@
         group: root
 
     - name: Ansible alternatives local facts script present
-      copy:
+      ansible.builtin.copy:
         src: update_alternatives.fact
         dest: /etc/ansible/facts.d/update_alternatives.fact
         mode: 0700

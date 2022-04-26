@@ -3,30 +3,30 @@
   block:
 
     - name: Debug alternative
-      debug:
+      ansible.builtin.debug:
         var: alt
         verbosity: 2
 
     - name: Check alternative name
-      assert:
+      ansible.builtin.assert:
         that:
           - alt.alternative is defined
           - alt.alternative | type_debug is regex('AnsibleUnicode|AnsibleUnsafeText|str')
 
     - name: Check alternative state
-      assert:
+      ansible.builtin.assert:
         that:
           - alt.state is regex('^present|absent$')
       when: alt.state is defined
 
     - name: Check alternative link
-      include_tasks: check_path.yml
+      ansible.builtin.include_tasks: check_path.yml
       vars:
         path: "{{ alt.alternative }}"
       when: ( alt.state is not defined ) or ( alt.state == "present" )
 
     - name: Check alternative priority
-      assert:
+      ansible.builtin.assert:
         that:
           - alt.priority | type_debug == "int"
           - alt.priority is regex('^[0-9]{1,4}$')
@@ -35,12 +35,12 @@
       block:
 
         - name: Check that alternative slaves is a array
-          assert:
+          ansible.builtin.assert:
             that:
               - alt.slaves | type_debug == "list"
 
         - name: Include checks for alternative slaves when present
-          include_tasks: check_slave.yml
+          ansible.builtin.include_tasks: check_slave.yml
           loop: "{{ alt.slaves }}"
           loop_control:
             loop_var: slave
