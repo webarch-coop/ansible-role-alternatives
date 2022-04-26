@@ -17,7 +17,6 @@ alternatives_update:
         # state: present
         # priority: 74
         priority: 200
-        priority: 
         slaves:
           - name: php.1.gz
             # state: present
