@@ -2,7 +2,13 @@
 - name: Check the alternatives
   block:
 
-    - name: Debug alternatives
+    - name: Check if alternative matches local facts
+      debug:
+        msg: "Alternative {{ alt_update.name }} already configured"
+      when:
+        - local_facts.update_alternatives.selections[alt_update.name] == alt_update 
+
+    - name: Debug alternative
       debug:
         var: alt_update
         verbosity: 2
