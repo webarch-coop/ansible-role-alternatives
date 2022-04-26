@@ -6,7 +6,7 @@
       debug:
         msg: >
           update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
-          --remove "{{ alt_update.name }}" "{{ alternative.alternative }}"
+          --remove {{ alt_update.name | quote }} {{ alternative.alternative | quote }}
       when: ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
 
     - name: "Remove alternative {{ alternative.alternative }}"
@@ -33,10 +33,10 @@
       debug:
         msg: >
           update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
-          --install "{{ alt_update.link }}" "{{ alt_update.name }}" "{{ alternative.alternative }}" "{{ alternative.priority }}"
+          --install {{ alt_update.link | quote }} {{ alt_update.name | quote }} {{ alternative.alternative | quote }} {{ alternative.priority | quote }}
           {% if alternative.slaves is defined %}
             {% for slave in alternative.slaves %}
-              --slave "{{ alt_update.link }}" "{{ slave.name }}" "{{ slave.path }}"
+              --slave {{ alt_update.link | quote }} {{ slave.name | quote }} {{ slave.path | quote }}
             {% endfor %}
           {% endif %}
       when: ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
@@ -45,10 +45,10 @@
       ansible.builtin.command:
         cmd: >
           update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
-          --install "{{ alt_update.link }}" "{{ alt_update.name }}" "{{ alternative.alternative }}" "{{ alternative.priority }}"
+          --install {{ alt_update.link | quote }} {{ alt_update.name | quote }} {{ alternative.alternative | quote }} {{ alternative.priority | quote }}
           {% if alternative.slaves is defined %}
             {% for slave in alternative.slaves %}
-              --slave "{{ alt_update.link }}" "{{ slave.name }}" "{{ slave.path }}"
+              --slave {{ alt_update.link | quote }} {{ slave.name | quote }} {{ slave.path | quote }}
             {% endfor %}
           {% endif %}
       register: alternative_updated

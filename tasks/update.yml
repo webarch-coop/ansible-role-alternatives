@@ -2,6 +2,13 @@
 - name: Update alternatives
   block:
 
+    - name: "Check alternative {{ alt_update.name }} absent"
+      debug:
+        msg: "update-alternatives --remove-all {{ alt_update.name }}"
+      when:
+        - ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
+        - ( alt_update.state is defined ) and ( alt_update.state == "absent" )
+
     - name: "Alternative {{ alt_update.name }} absent"
       ansible.builtin.command: "update-alternatives --remove-all {{ alt_update.name }}"
       when: ( alt_update.state is defined ) and ( alt_update.state == "absent" )
