@@ -2,10 +2,6 @@
 - name: Check the alternatives
   block:
 
-    - name: Debug alternatives
-      fail:
-        msg: "{{ alt_update.alternatives | map(attribute='alternative') }}"
-
     - name: Proposed alternative doesn't match local facts
       ansible.builtin.debug:
         msg: "Proposed alternative {{ alt_update.name }} doesn't match existing alternatives so checking the proposed variables"
@@ -49,10 +45,20 @@
               - alt_update.status is defined
               - alt_update.status is regex('auto|manual$')
 
+        - name: Check that best is one of the alternatives
+          assert:
+            that:
+              - alt_update.best in ( alt_update.alternatives | map(attribute='alternative') )
+
         - name: Check best path
           include_tasks: check_path.yml
           vars:
             path: "{{ alt_update.best }}"
+
+        - name: Check that value is one of the alternatives
+          assert:
+            that:
+              - alt_update.value in ( alt_update.alternatives | map(attribute='alternative') )
 
         - name: Check value path
           include_tasks: check_path.yml
