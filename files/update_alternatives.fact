@@ -16,7 +16,7 @@ else
   exit
 fi
 
-jo $(
+jo -a $(
   if [[ "${#selections[@]}" -gt "0" ]]
   then
     for sel in "${selections[@]}"
