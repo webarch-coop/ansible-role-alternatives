@@ -24,13 +24,13 @@
 
         - name: Debug remove result standard out
           ansible.builtin.debug:
-            var: alternative_removed.stdout
+            var: alternative_removed.stdout_lines
             verbosity: 2
           when: ( alternative_removed.stdout is defined ) and ( alternative_removed.stdout | length > 0 )
 
         - name: Debug remove result standard error
           ansible.builtin.debug:
-            var: alternative_removed.stderr
+            var: alternative_removed.stderr_lines
             verbosity: 2
           when: ( alternative_removed.stderr is defined ) and ( alternative_removed.stderr | length > 0 )
 
@@ -72,13 +72,13 @@
 
         - name: Debug update result standard out
           ansible.builtin.debug:
-            var: alternative_updated.stdout
+            var: alternative_updated.stdout_lines
             verbosity: 2
           when: ( alternative_updated.stdout is defined ) and ( alternative_updated.stdout | length > 0 )
 
         - name: Debug update result standard error
           ansible.builtin.debug:
-            var: alternative_updated.stderr
+            var: alternative_updated.stderr_lines
             verbosity: 2
           when: ( alternative_updated.stderr is defined ) and ( alternative_updated.stderr | length > 0 )
 
