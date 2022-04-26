@@ -21,8 +21,9 @@
             that:
               - alternatives_update | type_debug == "list"
 
-        - name: Include checks for the alternatives present
+        - name: Include checks for the alternatives present if they don't match existing alternatives
           include_tasks: check_alternatives.yml
+          when: alt_update != ansible_local.update_alternatives.selections[alt_update.name]
           loop: "{{ alternatives_update }}"
           loop_control:
             loop_var: alt_update
