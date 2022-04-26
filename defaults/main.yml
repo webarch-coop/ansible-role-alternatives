@@ -3,6 +3,7 @@ alternatives: true
 alternative_facts: true
 alternatives_update:
   - name: php
+    state: absent
     # state: present
     link: /usr/bin/php
     best: /usr/bin/php7.4
