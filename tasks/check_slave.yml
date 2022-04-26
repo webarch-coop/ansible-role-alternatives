@@ -20,25 +20,9 @@
       when: slave.state is defined
 
     - name: Check slave path
-      block:
-
-        - name: Check slave path is defined
-          ansible.builtin.assert:
-            that:
-              - slave.path is defined
-              - slave.path is regex('^\/')
-              - slave.path | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
-
-        - name: Check slave path exists
-          stat:
-            path: "{{ slave.path }}"
-          register: alternatives_slave_path
-
-        - name: Fail if slave path doesn't exist"
-          assert:
-            that:
-              - alternatives_slave_path.stat.exists
-
+      include_tasks: check_path.yml
+      vars:
+        path: "{{ slave.path }}"
       when: ( slave.state is not defined ) or ( slave.state == "present" )
 
   tags:

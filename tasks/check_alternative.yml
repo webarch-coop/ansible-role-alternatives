@@ -20,18 +20,9 @@
       when: alt.state is defined
 
     - name: Check alternative link
-      block:
-
-        - name: Check alternative link exists
-          stat:
-            path: "{{ alt.alternative }}"
-          register: alternatives_alternative_path
-
-        - name: Fail if alternative path doesn't exist"
-          assert:
-            that:
-              - alternatives_alternative_path.stat.exists
-
+      include_tasks: check_path.yml
+      vars:
+        path: "{{ alt.alternative }}"
       when: ( alt.state is not defined ) or ( alt.state == "present" )
 
     - name: Check alternative priority
