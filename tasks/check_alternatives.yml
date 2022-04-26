@@ -6,7 +6,7 @@
       debug:
         msg: "Alternative {{ alt_update.name }} already configured"
       when:
-        - local_facts.update_alternatives.selections[alt_update.name] == alt_update 
+        - ansible_local.update_alternatives.selections[alt_update.name] == alt_update 
 
     - name: Debug alternative
       debug:
