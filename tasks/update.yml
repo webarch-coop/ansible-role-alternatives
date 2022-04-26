@@ -23,9 +23,9 @@
             label: "{{ alternative.alternative }}"
 
         - name: Set the link group to auto if was set to manual and should be set to auto
-          ansible.builtin.command: "update-alternatives --auto {{ alternative.name }}"
+          ansible.builtin.command: "update-alternatives --auto {{ alt_update.name }}"
           when:
-            - alternative.status == "auto"
+            - alt_update.status == "auto"
             - ansible_local.alternatives[alt_update.name].status == "manual"
 
       when: ( alt_update.state is not defined ) or ( alt_update.state == "present" )

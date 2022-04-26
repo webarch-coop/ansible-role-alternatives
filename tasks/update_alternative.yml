@@ -8,7 +8,7 @@
           update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
           --remove "{{ alt_update.name }}" "{{ alternative.alternative }}"
       register: alternative_removed
-      when: ( alternative.state is not defined ) or ( alternative.state == "present" )
+      when: ( alternative.state is defined ) and ( alternative.state == "absent" )
 
     - name: Debug remove result standard out
       debug:
