@@ -27,9 +27,9 @@
 
     - name: Debug remove result standard error
       debug:
-        var: alternative_removed.stdout error
+        var: alternative_removed.stderr
         verbosity: 2
-      when: alternative_removed.stdout is defined
+      when: alternative_removed.stderr is defined
 
     - name: "Check update alternative {{ alternative.alternative }}"
       debug:
@@ -66,9 +66,9 @@
 
     - name: Debug update result standard error
       debug:
-        var: alternative_updated.stdout error
+        var: alternative_updated.stderr error
         verbosity: 2
-      when: alternative_updated.stdout is defined
+      when: alternative_updated.stderr is defined
 
   tags:
     - alternatives
