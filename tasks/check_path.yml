@@ -15,7 +15,7 @@
       register: alternatives_path
 
     - name: Fail if path doesn't exist"
-      aansible.builtin.ssert:
+      ansible.builtin.assert:
         that:
           - alternatives_path.stat.exists
 
