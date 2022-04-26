@@ -16,16 +16,20 @@ else
   exit
 fi
 
-jo -a $(
+jo $(
   if [[ "${#selections[@]}" -gt "0" ]]
   then
     for sel in "${selections[@]}"
     do
       if alternative=$(jc update-alternatives --query "${sel}")
       then
-        jo selection="${sel}" state=present "${sel}"="${alternative}"
+        jo "${sel}"=$(
+          state=present selection="${alternative}"
+        )
       else
-        jo selection="${sel}" state=absent
+        jo "${sel}"=$(
+          state=absent
+        )
       fi
     done
   else
