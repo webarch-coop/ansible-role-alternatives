@@ -2,26 +2,48 @@
 - name: Update alternative
   block:
 
-    - name: Update alternative
+    - name: "Remove alternative {{ alternative.alternative }}"
       ansible.builtin.command:
         cmd: >
-          update-alternatives --install "{{ alt_update.link }}" "{{ alt_update.name }}" "{{ alternative.alternative }}" "{{ alternative.priority }}"
+          update-alternatives {% if ansible_verbosity == 1 %}--verbose{% elif ansible_verbosity >= 2 %}--debug{% endif %}
+          --remove "{{ alt_update.name }}" "{{ alternative.alternative }}"
+      register: alternative_removed
+      when: ( alternative.state is not defined ) or ( alternative.state == "present" )
+
+    - name: Debug remove result standard out
+      debug:
+        var: alternative_removed.stdout
+        verbosity: 2
+      when: alternative_removed.stdout is defined
+
+    - name: Debug remove result standard error
+      debug:
+        var: alternative_removed.stdout error
+        verbosity: 2
+      when: alternative_removed.stdout is defined
+
+    - name: "Update alternative {{ alternative.alternative }}"
+      ansible.builtin.command:
+        cmd: >
+          update-alternatives {% if ansible_verbosity == 1 %}--verbose{% elif ansible_verbosity >= 2 %}--debug{% endif %}
+          --install "{{ alt_update.link }}" "{{ alt_update.name }}" "{{ alternative.alternative }}" "{{ alternative.priority }}"
           {% if alternative.slaves is defined %}
             {% for slave in alternative.slaves %}
               --slave "{{ alt_update.link }}" "{{ slave.name }}" "{{ slave.path }}"
             {% endfor %}
           {% endif %}
-      register: alternative_updated 
+      register: alternative_updated
+      when: ( alternative.state is not defined ) or ( alternative.state == "present" )
 
     - name: Debug update result standard out
       debug:
-        var: alternative_updated.stdout 
+        var: alternative_updated.stdout
         verbosity: 2
       when: alternative_updated.stdout is defined
 
     - name: Debug update result standard error
       debug:
-        var: alternative_updated.stdout error 
+        var: alternative_updated.stdout error
         verbosity: 2
       when: alternative_updated.stdout is defined
 
