@@ -66,7 +66,7 @@
 
     - name: Debug update result standard error
       debug:
-        var: alternative_updated.stderr error
+        var: alternative_updated.stderr
         verbosity: 2
       when: alternative_updated.stderr is defined
 
