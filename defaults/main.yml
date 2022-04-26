@@ -101,6 +101,7 @@ alternatives_update:
   - name: php-fpm.sock
     link: /run/php/php-fpm.sock
     # state: present
+    state: absent
     best: /run/php/php8.1-fpm.sock
     status: auto
     value: /run/php/php8.1-fpm.sock
