@@ -38,7 +38,7 @@
 
       when: ( alternatives_update is defined ) and ( alternatives_update != [] )
 
-    - name: Reload ansible_local.alternatives facts
+    - name: Reload ansible_local.update_alternatives facts
       ansible.builtin.meta: flush_handlers
 
     - name: Debug the updated ansible_local.alternatives facts when they have changed
