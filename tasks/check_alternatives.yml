@@ -61,7 +61,7 @@
 
           when: ( alt_update.state is not defined ) or ( alt_update.state == "present" )
 
-      when: ansible_local.update_alternatives.selections[alt_update.name] == alt_update 
+      when: alt_update != ansible_local.update_alternatives.selections[alt_update.name]
 
   tags:
     - alternatives
