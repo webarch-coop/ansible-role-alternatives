@@ -15,21 +15,25 @@ alternatives_update:
     alternatives:
       - alternative: /usr/bin/php7.4
         # state: present
-        priority: 74
+        # priority: 74
+        priority: 200
+        priority: 
         slaves:
           - name: php.1.gz
             # state: present
             path: /usr/share/man/man1/php7.4.1.gz
       - alternative: /usr/bin/php8.0
         # state: present
-        priority: 80
+        # priority: 80
+        priority: 190
         slaves:
           - name: php.1.gz
             # state: present
             path: /usr/share/man/man1/php8.0.1.gz
       - alternative: /usr/bin/php8.1
         # state: present
-        priority: 81
+        # priority: 81
+        priority: 180
         slaves:
           - name: php.1.gz
             # state: present
@@ -101,7 +105,7 @@ alternatives_update:
   - name: php-fpm.sock
     link: /run/php/php-fpm.sock
     # state: present
-    state: absent
+    # state: absent
     best: /run/php/php8.1-fpm.sock
     status: auto
     value: /run/php/php8.1-fpm.sock
