@@ -37,6 +37,9 @@ alternatives_update:
   - name: phar
     # state: present
     link: /usr/bin/phar
+    best: /usr/bin/phar8.1
+    status: auto
+    value: /usr/bin/phar8.1
     slaves:
       - name: phar.1.gz
         # state: present
