@@ -26,7 +26,7 @@
           ansible.builtin.command: "update-alternatives --auto {{ alt_update.name }}"
           when:
             - alt_update.status == "auto"
-            - ansible_local.alternatives[alt_update.name].status == "manual"
+            - ansible_local.update_alternatives.selections[alt_update.name].status == "manual"
 
       when: ( alt_update.state is not defined ) or ( alt_update.state == "present" )
 
