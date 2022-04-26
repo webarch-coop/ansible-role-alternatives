@@ -18,19 +18,15 @@ fi
 
 if [[ "${#selections[@]}" -gt "0" ]]
 then
-  for sel in "${selections[@]}"
-  do
-    if alternative=$(jc update-alternatives --query "${sel}")
-    then
-      jo "${sel}"=$(
-        jo state=present selection="${alternative}"
-      )
-    else
-      jo "${sel}"=$(
-        jo state=absent
-      )
-    fi
-  done
+  jo state=present $(
+    for sel in "${selections[@]}"
+    do
+      if selection=$(jc update-alternatives --query "${sel}")
+      then
+        echo "selections[${sel}]=${selection}"
+      fi
+    done
+  )
 else
   echo "Config file /etc/ansible/alternatives empty" >&2
   jo state=absent
