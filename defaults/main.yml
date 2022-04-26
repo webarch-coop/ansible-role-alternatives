@@ -66,6 +66,9 @@ alternatives_update:
   - name: phar.phar
     # state: present
     link: /usr/bin/phar.phar
+    best: /usr/bin/phar.phar8.1
+    status: auto
+    value: /usr/bin/phar.phar8.1
     slaves:
       - name: phar.phar.1.gz
         # state: present
@@ -95,6 +98,9 @@ alternatives_update:
   - name: php-fpm.sock
     link: /run/php/php-fpm.sock
     # state: present
+    best: /run/php/php8.1-fpm.sock
+    status: auto
+    value: /run/php/php8.1-fpm.sock
     alternatives:
       - alternative: /run/php/php7.4-fpm.sock
         # state: present

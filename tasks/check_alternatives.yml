@@ -2,68 +2,66 @@
 - name: Check the alternatives
   block:
 
-    - name: Debug local facts
-      debug:
-        var: ansible_local.update_alternatives.selections[alt_update.name]
-      when: ansible_local.update_alternatives.selections[alt_update.name] is defined
-
-    - name: Debug proposed alternative
-      debug:
-        var: alt_update
-
     - name: Check if alternative matches local facts
-      debug:
+      ansible.builtin.debug:
         msg: "Alternative {{ alt_update.name }} already configured"
-      when:
-        - ansible_local.update_alternatives.selections[alt_update.name] == alt_update 
+      when: ansible_local.update_alternatives.selections[alt_update.name] == alt_update 
 
-    - name: Debug fail
-      fail:
-
-    - name: Debug alternative
-      debug:
-        var: alt_update
-        verbosity: 2
-
-    - name: Check alternative name
-      assert:
-        that:
-          - alt_update.name is defined
-          - alt_update.name | type_debug is regex('AnsibleUnicode|AnsibleUnsafeText|str')
-
-    - name: Check alternative state
-      ansible.builtin.assert:
-        that:
-          - alt_update.state is regex('^present|absent$')
-      when: alt_update.state is defined
-
-    - name: Checks when alternative is present
+    - name: Checks if alternative doesn't match local facts
       block:
 
-        - name: Check alternative link
+        - name: Debug local facts
+          debug:
+            var: ansible_local.update_alternatives.selections[alt_update.name]
+            verbosity: 2
+          when: ansible_local.update_alternatives.selections[alt_update.name] is defined
+
+        - name: Debug proposed alternative
+          debug:
+            var: alt_update
+            verbosity: 2
+
+        - name: Check alternative name
+          assert:
+            that:
+              - alt_update.name is defined
+              - alt_update.name | type_debug is regex('AnsibleUnicode|AnsibleUnsafeText|str')
+
+        - name: Check alternative state
           ansible.builtin.assert:
             that:
-              - alt_update.link is defined
-              - alt_update.link is regex('^\/')
-              - alt_update.link | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
+              - alt_update.state is regex('^present|absent$')
+          when: alt_update.state is defined
 
-        - name: Include checks for alternative slaves when present
-          include_tasks: check_slave.yml
-          loop: "{{ alt_update.slaves }}"
-          loop_control:
-            loop_var: slave
-            label: "{{ slave.name }}"
-          when: ( alt_update.slaves is defined ) and (alt_update.slaves != [] )
+        - name: Checks when alternative is present
+          block:
 
-        - name: Include checks for alternative alternatives when present
-          include_tasks: check_alternative.yml
-          loop: "{{ alt_update.alternatives }}"
-          loop_control:
-            loop_var: alt
-            label: "{{ alt.alternative }}"
-          when: ( alt_update.alternatives is defined ) and (alt_update.alternatives != [] )
+            - name: Check alternative link
+              ansible.builtin.assert:
+                that:
+                  - alt_update.link is defined
+                  - alt_update.link is regex('^\/')
+                  - alt_update.link | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
 
-      when: ( alt_update.state is not defined ) or ( alt_update.state == "present" )
+            - name: Include checks for alternative slaves when present
+              include_tasks: check_slave.yml
+              loop: "{{ alt_update.slaves }}"
+              loop_control:
+                loop_var: slave
+                label: "{{ slave.name }}"
+              when: ( alt_update.slaves is defined ) and (alt_update.slaves != [] )
+
+            - name: Include checks for alternative alternatives when present
+              include_tasks: check_alternative.yml
+              loop: "{{ alt_update.alternatives }}"
+              loop_control:
+                loop_var: alt
+                label: "{{ alt.alternative }}"
+              when: ( alt_update.alternatives is defined ) and (alt_update.alternatives != [] )
+
+          when: ( alt_update.state is not defined ) or ( alt_update.state == "present" )
+
+      when: ansible_local.update_alternatives.selections[alt_update.name] == alt_update 
 
   tags:
     - alternatives
