@@ -3,13 +3,13 @@
   block:
 
     - name: Check that we have updates-alternatives 1.15.0 or greater
-      assert:
+      ansible.builtin.assert:
         that:
           - ansible_local.update_alternatives.version is version('1.15.0', '>=')
-        when: ansible_local.update_alternatives.version is defined
+      when: ansible_local.update_alternatives.version is defined
 
     - name: Set a fact to indicate there is --debug support when updates-alternatives 1.19.3 or greater
-      set_fact:
+      ansible.builtin.set_fact:
         alternatives_debug: true
       when:
         - ansible_local.update_alternatives.version is defined
