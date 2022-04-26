@@ -10,6 +10,10 @@
     - name: Checks if alternative doesn't match local facts
       block:
 
+        - name: Proposed alternative doesn't match local facts
+          ansible.builtin.debug:
+            msg: "Proposed alternative {{ alt_update.name }} doesn't match existing alternatives so checking the proposed variables"
+
         - name: Debug local facts
           debug:
             var: ansible_local.update_alternatives.selections[alt_update.name]
