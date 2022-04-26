@@ -52,10 +52,10 @@
               notify: Update ansible_local
 
           when:
-            - alt_update.state == "present"
-            - alt_update.status == "auto"
-            - ansible_local.update_alternatives.selections[alt_update.name] is defined
-            - ansible_local.update_alternatives.selections[alt_update.name].status == "manual"
+            - ( alt_update.state is not defined ) or ( ( alt_update.state is defined ) and ( alt_update.state == "present" ) )
+            - ( alt_update.status is defined ) and ( alt_update.status == "auto" )
+            - ( ansible_local.update_alternatives.selections[alt_update.name] is defined )
+            - ( ansible_local.update_alternatives.selections[alt_update.name].status == "manual" )
 
       when: ( alt_update.state is not defined ) or ( alt_update.state == "present" )
 
