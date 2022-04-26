@@ -9,15 +9,15 @@
     - name: Updates alternatives
       block:
 
-        - name: Debug alt.value.alternatives
+        - name: Debug alt_update.alternatives
           ansible.builtin.debug:
-            var: alt.value.alternatives
+            var: alt_update.alternatives
             verbosity: 2
-          when: alt.value.alternatives is defined
+          when: alt_update.alternatives is defined
 
         - name: Include update alternative tasks
           ansible.builtin.include_tasks: update_alternative.yml
-          loop: "{{ alt.value.alternatives }}"
+          loop: "{{ alt_update.alternatives }}"
           loop_control:
             loop_var: alternative
             label: "{{ alternative.path }}"
