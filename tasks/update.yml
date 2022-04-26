@@ -33,6 +33,12 @@
             loop_var: alternative
             label: "{{ alternative.alternative }}"
 
+        - name: Reload ansible_local.alternatives facts
+          ansible.builtin.meta: flush_handlers
+          when: >
+            ( ( alternative_removed is defined ) and ( alternative_removed.changed ) ) or
+            ( ( alternative_updated is defined ) and ( alternative_updated.changed ) )
+
         - name: Set status for present link groups
           block:
 
