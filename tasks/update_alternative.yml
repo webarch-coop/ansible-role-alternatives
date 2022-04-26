@@ -1,74 +1,91 @@
 ---
-- name: Update alternative
+- name: Remove or update alternative
   block:
 
-    - name: "Check remove alternative {{ alternative.alternative }}"
-      debug:
-        msg: >
-          update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
-          --remove {{ alt_update.name | quote }} {{ alternative.alternative | quote }}
-      when:
-        - ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
+    - name: Remove alternative
+      block:
+
+        - name: "Check remove alternative {{ alternative.alternative }}"
+          ansible.builtin.debug:
+            msg: >
+              update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
+              --remove {{ alt_update.name | quote }} {{ alternative.alternative | quote }}
+          when: ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
         - ( alternative.state is defined ) and ( alternative.state == "absent" )
 
-    - name: "Remove alternative {{ alternative.alternative }}"
-      ansible.builtin.command:
-        cmd: >
-          update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
-          --remove "{{ alt_update.name }}" "{{ alternative.alternative }}"
-      register: alternative_removed
+        - name: "Remove alternative {{ alternative.alternative }}"
+          ansible.builtin.command:
+            cmd: >
+              update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
+              --remove "{{ alt_update.name }}" "{{ alternative.alternative }}"
+          register: alternative_removed
+
+      rescue:
+
+        - name: Debug remove result standard out
+          ansible.builtin.debug:
+            var: alternative_removed.stdout
+            verbosity: 2
+          when: ( alternative_removed.stdout is defined ) and ( alternative_removed.stdout | length > 0 )
+
+        - name: Debug remove result standard error
+          ansible.builtin.debug:
+            var: alternative_removed.stderr
+            verbosity: 2
+          when: ( alternative_removed.stderr is defined ) and ( alternative_removed.stderr | length > 0 )
+
+        - name: Fail as there was an error running update-alternatives --remove
+          ansible.builtin.fail:
+            msg: "Removal of alternative {{ alternative.alternative }} failed."
+
       when: ( alternative.state is defined ) and ( alternative.state == "absent" )
 
-    - name: Debug remove result standard out
-      debug:
-        var: alternative_removed.stdout
-        verbosity: 2
-      when: ( alternative_removed.stdout is defined ) and ( alternative_removed.stdout | length > 0 )
+    - name: Update alternative
+      block:
 
-    - name: Debug remove result standard error
-      debug:
-        var: alternative_removed.stderr
-        verbosity: 2
-      when: ( alternative_removed.stderr is defined ) and ( alternative_removed.stderr | length > 0 )
+        - name: "Check update alternative {{ alternative.alternative }}"
+          ansible.builtin.debug:
+            msg: >
+              update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
+              --install {{ alt_update.link | quote }} {{ alt_update.name | quote }} {{ alternative.alternative | quote }} {{ alternative.priority | quote }}
+              {% if alternative.slaves is defined %}
+                {% for slave in alternative.slaves %}
+                  --slave {{ alt_update.link | quote }} {{ slave.name | quote }} {{ slave.path | quote }}
+                {% endfor %}
+              {% endif %}
+          when: ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
 
-    - name: "Check update alternative {{ alternative.alternative }}"
-      debug:
-        msg: >
-          update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
-          --install {{ alt_update.link | quote }} {{ alt_update.name | quote }} {{ alternative.alternative | quote }} {{ alternative.priority | quote }}
-          {% if alternative.slaves is defined %}
-            {% for slave in alternative.slaves %}
-              --slave {{ alt_update.link | quote }} {{ slave.name | quote }} {{ slave.path | quote }}
-            {% endfor %}
-          {% endif %}
-      when:
-        - ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
-        - ( alternative.state is not defined ) or ( alternative.state == "present" )
+        - name: "Update alternative {{ alternative.alternative }}"
+          ansible.builtin.command:
+            cmd: >
+              update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
+              --install {{ alt_update.link | quote }} {{ alt_update.name | quote }} {{ alternative.alternative | quote }} {{ alternative.priority | quote }}
+              {% if alternative.slaves is defined %}
+                {% for slave in alternative.slaves %}
+                  --slave {{ alt_update.link | quote }} {{ slave.name | quote }} {{ slave.path | quote }}
+                {% endfor %}
+              {% endif %}
+          register: alternative_updated
 
-    - name: "Update alternative {{ alternative.alternative }}"
-      ansible.builtin.command:
-        cmd: >
-          update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
-          --install {{ alt_update.link | quote }} {{ alt_update.name | quote }} {{ alternative.alternative | quote }} {{ alternative.priority | quote }}
-          {% if alternative.slaves is defined %}
-            {% for slave in alternative.slaves %}
-              --slave {{ alt_update.link | quote }} {{ slave.name | quote }} {{ slave.path | quote }}
-            {% endfor %}
-          {% endif %}
-      register: alternative_updated
+      rescue:
+
+        - name: Debug update result standard out
+          ansible.builtin.debug:
+            var: alternative_updated.stdout
+            verbosity: 2
+          when: ( alternative_updated.stdout is defined ) and ( alternative_updated.stdout | length > 0 )
+
+        - name: Debug update result standard error
+          ansible.builtin.debug:
+            var: alternative_updated.stderr
+            verbosity: 2
+          when: ( alternative_updated.stderr is defined ) and ( alternative_updated.stderr | length > 0 )
+
+        - name: Fail as there was an error running update-alternatives --install
+          ansible.builtin.fail:
+            msg: "Installing alternative {{ alternative.alternative }} failed."
+
       when: ( alternative.state is not defined ) or ( alternative.state == "present" )
-
-    - name: Debug update result standard out
-      debug:
-        var: alternative_updated.stdout
-        verbosity: 2
-      when: ( alternative_updated.stdout is defined ) and ( alternative_updated.stdout | length > 0 )
-
-    - name: Debug update result standard error
-      debug:
-        var: alternative_updated.stderr
-        verbosity: 2
-      when: ( alternative_updated.stderr is defined ) and ( alternative_updated.stderr | length > 0 )
 
   tags:
     - alternatives
