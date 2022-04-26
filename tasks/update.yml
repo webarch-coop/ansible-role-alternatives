@@ -29,18 +29,21 @@
             loop_var: alternative
             label: "{{ alternative.alternative }}"
 
-        - name: Check set the link group to auto if was set to manual and should be set to auto
-          debug:
-            msg: "update-alternatives --auto {{ alt_update.name }}"
-          when:
-            - ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
-            - alt_update.status == "auto"
-            - ansible_local.update_alternatives.selections[alt_update.name].status == "manual"
+        - name: Set status for present link groups
+          block:
 
-        - name: Set the link group to auto if was set to manual and should be set to auto
-          ansible.builtin.command: "update-alternatives --auto {{ alt_update.name }}"
+            - name: Check set the link group to auto if was set to manual and should be set to auto
+              debug:
+                msg: "update-alternatives --auto {{ alt_update.name }}"
+              when: ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
+
+            - name: Set the link group to auto if was set to manual and should be set to auto
+              ansible.builtin.command: "update-alternatives --auto {{ alt_update.name }}"
+
           when:
+            - alt_update.state == "present"
             - alt_update.status == "auto"
+            - ansible_local.update_alternatives.selections[alt_update.name] is defined
             - ansible_local.update_alternatives.selections[alt_update.name].status == "manual"
 
       when: ( alt_update.state is not defined ) or ( alt_update.state == "present" )
