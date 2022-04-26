@@ -8,14 +8,14 @@
         - name: "Check remove alternative {{ alternative.alternative }}"
           ansible.builtin.debug:
             msg: >
-              update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
+              update-alternatives {% if alternatives_debug and ansible_verbosity >= 2 %}--debug{% elif ansible_verbosity == 1 %}--verbose{% endif %}
               --remove {{ alt_update.name | quote }} {{ alternative.alternative | quote }}
           when: ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
 
         - name: "Remove alternative {{ alternative.alternative }}"
           ansible.builtin.command:
             cmd: >
-              update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
+              update-alternatives {% if alternatives_debug and ansible_verbosity >= 2 %}--debug{% elif ansible_verbosity == 1 %}--verbose{% endif %}
               --remove "{{ alt_update.name }}" "{{ alternative.alternative }}"
           register: alternative_removed
           notify: Update ansible_local
@@ -46,7 +46,7 @@
         - name: "Check update alternative {{ alternative.alternative }}"
           ansible.builtin.debug:
             msg: >
-              update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
+              update-alternatives {% if alternatives_debug and ansible_verbosity >= 2 %}--debug{% elif ansible_verbosity == 1 %}--verbose{% endif %}
               --install {{ alt_update.link | quote }} {{ alt_update.name | quote }} {{ alternative.alternative | quote }} {{ alternative.priority | quote }}
               {% if alternative.slaves is defined %}
                 {% for slave in alternative.slaves %}
@@ -58,7 +58,7 @@
         - name: "Update alternative {{ alternative.alternative }}"
           ansible.builtin.command:
             cmd: >
-              update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
+              update-alternatives {% if alternatives_debug and ansible_verbosity >= 2 %}--debug{% elif ansible_verbosity == 1 %}--verbose{% endif %}
               --install {{ alt_update.link | quote }} {{ alt_update.name | quote }} {{ alternative.alternative | quote }} {{ alternative.priority | quote }}
               {% if alternative.slaves is defined %}
                 {% for slave in alternative.slaves %}
