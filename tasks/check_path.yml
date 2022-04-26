@@ -18,6 +18,7 @@
       ansible.builtin.assert:
         that:
           - alternatives_path.stat.exists
+        fail_msg: "The file {{ path }} doesn't exist"
 
   tags:
     - alternatives
