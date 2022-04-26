@@ -2,6 +2,13 @@
 - name: Update alternative
   block:
 
+    - name: "Check remove alternative {{ alternative.alternative }}"
+      debug:
+        msg: >
+          update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
+          --remove "{{ alt_update.name }}" "{{ alternative.alternative }}"
+      when: ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
+
     - name: "Remove alternative {{ alternative.alternative }}"
       ansible.builtin.command:
         cmd: >
@@ -21,6 +28,18 @@
         var: alternative_removed.stdout error
         verbosity: 2
       when: alternative_removed.stdout is defined
+
+    - name: "Check update alternative {{ alternative.alternative }}"
+      debug:
+        msg: >
+          update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
+          --install "{{ alt_update.link }}" "{{ alt_update.name }}" "{{ alternative.alternative }}" "{{ alternative.priority }}"
+          {% if alternative.slaves is defined %}
+            {% for slave in alternative.slaves %}
+              --slave "{{ alt_update.link }}" "{{ slave.name }}" "{{ slave.path }}"
+            {% endfor %}
+          {% endif %}
+      when: ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
 
     - name: "Update alternative {{ alternative.alternative }}"
       ansible.builtin.command:
