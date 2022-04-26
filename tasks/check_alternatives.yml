@@ -2,6 +2,15 @@
 - name: Check the alternatives
   block:
 
+    - name: Debug local facts
+      debug:
+        var: ansible_local.update_alternatives.selections[alt_update.name]
+      when: ansible_local.update_alternatives.selections[alt_update.name] is defined
+
+    - name: Debug proposed alternative
+      debug:
+        var: alt_update
+
     - name: Check if alternative matches local facts
       debug:
         msg: "Alternative {{ alt_update.name }} already configured"
