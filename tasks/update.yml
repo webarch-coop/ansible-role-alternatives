@@ -20,7 +20,7 @@
           loop: "{{ alt_update.alternatives }}"
           loop_control:
             loop_var: alternative
-            label: "{{ alternative.path }}"
+            label: "{{ alternative.alternative }}"
 
         - name: Set the link group to auto if was set to manual and should be set to auto
           ansible.builtin.command: "update-alternatives --auto {{ alternative.name }}"
