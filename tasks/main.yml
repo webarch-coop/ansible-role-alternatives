@@ -10,14 +10,14 @@
 
         - name: Set a variable for the existing ansible_local.alternatives is defined
           ansible.builtin.set_fact:
-            alternatives_previous_facts: "{{ ansible_local.alternatives }}"
+            alternatives_previous_facts: "{{ ansible_local.update_alternatives }}"
 
-        - name: Debug the current ansible_local.alternatives facts
+        - name: Debug the current ansible_local.update_alternatives facts
           ansible.builtin.debug:
-            var: ansible_local.alternatives
+            var: ansible_local.update_alternatives
             verbosity: 2
 
-      when: ( ansible_local.alternatives is defined ) and ( ansible_local.alternatives != [] )
+      when: ( ansible_local.update_alternatives is defined ) and ( ansible_local.update_alternatives != [] )
 
     - name: Include local facts tasks
       ansible.builtin.include_tasks: local_facts.yml
@@ -28,7 +28,7 @@
 
         - name: Include update tasks for alternatives that need updating
           ansible.builtin.include_tasks: update.yml
-          when: ( ( ansible_local.alternatives[alt] is defined ) and ( ansible_local.alternatives[alt] != alt ) ) or ( ansible_local.alternatives[alt] is not defined )
+          when: alt_update != ansible_local.update_alternatives.selections[alt_update.name]
           loop: "{{ alternatives_update }}"
           loop_control:
             loop_var: alt_update
@@ -45,7 +45,7 @@
         verbosity: 2
       when:
         - alternatives_previous_facts is defined
-        - ansible_local.alternatives != alternatives_previous_facts
+        - ansible_local.update_alternatives != alternatives_previous_facts
 
   when: alternatives
   tags:

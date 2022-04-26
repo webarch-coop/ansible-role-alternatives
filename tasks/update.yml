@@ -9,14 +9,6 @@
     - name: Updates alternatives
       block:
 
-        - name: "Include update tasks for slaves for {{ alt_update.name }}"
-          ansible.builtin.include_tasks: update_slave.yml
-          loop: "{{ alt_update.slaves }}"
-          loop_control:
-            loop_var: alternative
-            label: "{{ alternative.path }}"
-          when: alt_update.slaves is defined
-
         - name: Debug alt.value.alternatives
           ansible.builtin.debug:
             var: alt.value.alternatives
@@ -31,9 +23,11 @@
             label: "{{ alternative.path }}"
           when: alternative.state == "present"
 
-        - name: Set the link group to auto if was set to manual
-          ansible.builtin.command: "update-alternatives --auto {{ alt.key }}"
-          when: ansible_local.alternatives[alt.key].status == "manual"
+        - name: Set the link group to auto if was set to manual and should be set to auto
+          ansible.builtin.command: "update-alternatives --auto {{ alternative.name }}"
+          when:
+            - alternative.status == "auto"
+            - ansible_local.alternatives[alt.key].status == "manual"
 
       when: ( alt_update.state is not defined ) or ( alt_update.state == "present" )
 

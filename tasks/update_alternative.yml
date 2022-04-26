@@ -2,57 +2,28 @@
 - name: Update alternative
   block:
 
-    - name: Get the existing alternative values if they exist
-      ansible.builtin.set_fact:
-        alternatives_existing_path: "{{ existing_alternative.path | default('') }}"
-        alternatives_existing_priority: "{{ existing_alternative.priority | default('') }}"
-      loop: "{{ ansible_local.alternatives[alt.key].alternatives }}"
-      loop_control:
-        loop_var: existing_alternative
-      when:
-        - ansible_local.alternatives[alt.key].alternatives is defined
-        - existing_alternative.path is defined
-        - existing_alternative.path == alternative.path
+    - name: Update alternative
+      ansible.builtin.command:
+        cmd: >
+          update-alternatives --install "{{ alt_update.link }}" "{{ alt_update.name }}" "{{ alternative.alternative }}" "{{ alternative.priority }}"
+          {% if alternative.slaves is defined %}
+            {% for slave in alternative.slaves %}
+              --slave "{{ alt_update.link }}" "{{ slave.name }}" "{{ slave.path }}"
+            {% endfor %}
+          {% endif %}
+      register: alternative_updated 
 
-    - name: Debug existing alternative path
-      ansible.builtin.debug:
-        var: alternatives_existing_path
+    - name: Debug update result standard out
+      debug:
+        var: alternative_updated.stdout 
         verbosity: 2
-      when: alternatives_existing_path is defined
+      when: alternative_updated.stdout is defined
 
-    - name: Debug proposed alternative path
-      ansible.builtin.debug:
-        var: alternative.path
+    - name: Debug update result standard error
+      debug:
+        var: alternative_updated.stdout error 
         verbosity: 2
-
-    - name: Debug existing alternative path
-      ansible.builtin.debug:
-        var: alternatives_existing_priority
-        verbosity: 2
-      when: alternatives_existing_priority is defined
-
-    - name: Debug proposed alternative priority
-      ansible.builtin.debug:
-        var: alternative.priority
-        verbosity: 2
-
-    - name: Install alternatives when existing alternatives are not defined
-      ansible.builtin.command: "update-alternatives --install {{ alt.value.link }} {{ alt.key }} {{ alternative.path }} {{ alternative.priority }}"
-      when: ansible_local.alternatives[alt.key].alternatives is not defined
-
-    - name: Update alternative when existing alternative is defined but the link has changed
-      ansible.builtin.command: "update-alternatives --install {{ alt.value.link }} {{ alt.key }} {{ alternative.path }} {{ alternative.priority }}"
-      when:
-        - ansible_local.alternatives[alt.key].alternatives is defined
-        - alternatives_existing_path is defined
-        - alternatives_existing_path != alternative.path
-
-    - name: Update alternative when existing alternative is defined but the priority has changed
-      ansible.builtin.command: "update-alternatives --install {{ alt.value.link }} {{ alt.key }} {{ alternative.path }} {{ alternative.priority }}"
-      when:
-        - ansible_local.alternatives[alt.key].alternatives is defined
-        - alternatives_existing_priority is defined
-        - alternatives_existing_priority | int != alternative.priority | int
+      when: alternative_updated.stdout is defined
 
   tags:
     - alternatives
