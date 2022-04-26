@@ -14,7 +14,7 @@
       when:
         - ansible_local.update_alternatives.version is defined
         - ansible_local.update_alternatives.version is version('1.19.3', '>=')
-  
+
     - name: Check that alternatives and alternative_facts are booleans
       ansible.builtin.assert:
         that:
