@@ -6,6 +6,10 @@
 # server and alternatves might have been added to it by importing
 # this role.
 
+hash jo
+hash update-alternatives
+version=$(update-alternatives --version | head -1 | awk '{ print $4 }' | sed 's/[.]$//')
+
 if [[ -f "/etc/ansible/alternatives" ]]
 then
   declare -a selections=()
@@ -18,7 +22,7 @@ fi
 
 if [[ "${#selections[@]}" -gt "0" ]]
 then
-  jo state=present $(
+  jo state=present version="${version}" $(
     for sel in "${selections[@]}"
     do
       if selection=$(jc update-alternatives --query "${sel}")
@@ -30,4 +34,5 @@ then
 else
   echo "Config file /etc/ansible/alternatives empty" >&2
   jo state=absent
+  exit
 fi

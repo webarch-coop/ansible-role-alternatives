@@ -15,19 +15,18 @@
             verbosity: 2
           when: alt_update.alternatives is defined
 
-        - name: Include update alternative tasks
+        - name: Include remove or update alternative tasks
           ansible.builtin.include_tasks: update_alternative.yml
           loop: "{{ alt_update.alternatives }}"
           loop_control:
             loop_var: alternative
             label: "{{ alternative.path }}"
-          when: alternative.state == "present"
 
         - name: Set the link group to auto if was set to manual and should be set to auto
           ansible.builtin.command: "update-alternatives --auto {{ alternative.name }}"
           when:
             - alternative.status == "auto"
-            - ansible_local.alternatives[alt.key].status == "manual"
+            - ansible_local.alternatives[alt_update.name].status == "manual"
 
       when: ( alt_update.state is not defined ) or ( alt_update.state == "present" )
 

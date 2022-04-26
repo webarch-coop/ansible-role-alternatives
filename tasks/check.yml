@@ -2,6 +2,19 @@
 - name: Check alternatives variables
   block:
 
+    - name: Check that we have updates-alternatives 1.15.0 or greater
+      assert:
+        that:
+          - ansible_local.update_alternatives.version is version('1.15.0', '>=')
+        when: ansible_local.update_alternatives.version is defined
+
+    - name: Set a fact to indicate there is --debug support when updates-alternatives 1.19.3 or greater
+      set_fact:
+        alternatives_debug: true
+      when:
+        - ansible_local.update_alternatives.version is defined
+        - ansible_local.update_alternatives.version is version('1.19.3', '>=')
+  
     - name: Check that alternatives and alternative_facts are booleans
       ansible.builtin.assert:
         that:
