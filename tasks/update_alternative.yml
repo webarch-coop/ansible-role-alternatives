@@ -23,13 +23,13 @@
       debug:
         var: alternative_removed.stdout
         verbosity: 2
-      when: alternative_removed.stdout is defined
+      when: ( alternative_removed.stdout is defined ) and ( alternative_removed.stdout | length > 0 )
 
     - name: Debug remove result standard error
       debug:
         var: alternative_removed.stderr
         verbosity: 2
-      when: alternative_removed.stderr is defined
+      when: ( alternative_removed.stderr is defined ) and ( alternative_removed.stderr | length > 0 )
 
     - name: "Check update alternative {{ alternative.alternative }}"
       debug:
@@ -62,13 +62,13 @@
       debug:
         var: alternative_updated.stdout
         verbosity: 2
-      when: alternative_updated.stdout is defined
+      when: ( alternative_updated.stdout is defined ) and ( alternative_updated.stdout | length > 0 )
 
     - name: Debug update result standard error
       debug:
         var: alternative_updated.stderr
         verbosity: 2
-      when: alternative_updated.stderr is defined
+      when: ( alternative_updated.stderr is defined ) and ( alternative_updated.stderr | length > 0 )
 
   tags:
     - alternatives
