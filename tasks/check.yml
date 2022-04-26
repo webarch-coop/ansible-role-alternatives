@@ -36,7 +36,9 @@
 
         - name: Include checks for the alternatives present if they don't match existing alternatives
           ansible.builtin.include_tasks: check_alternatives.yml
-          when: alt_update != ansible_local.update_alternatives.selections[alt_update.name]
+          when: >
+            ( ansible_local.update_alternatives.selections[alt_update.name] is not defined ) or
+            ( alt_update != ansible_local.update_alternatives.selections[alt_update.name] )
           loop: "{{ alternatives_update }}"
           loop_control:
             loop_var: alt_update

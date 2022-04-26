@@ -28,7 +28,9 @@
 
         - name: Include update tasks for alternatives that need updating
           ansible.builtin.include_tasks: update.yml
-          when: alt_update != ansible_local.update_alternatives.selections[alt_update.name]
+          when: >
+            ( ansible_local.update_alternatives.selections[alt_update.name] is not defined ) or
+            ( alt_update != ansible_local.update_alternatives.selections[alt_update.name] )
           loop: "{{ alternatives_update }}"
           loop_control:
             loop_var: alt_update
