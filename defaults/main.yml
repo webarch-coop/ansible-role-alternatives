@@ -5,6 +5,9 @@ alternatives_update:
   - name: php
     # state: present
     link: /usr/bin/php
+    best: /usr/bin/php8.1
+    status: auto
+    value: /usr/bin/php8.1
     slaves:
       - name: php.1.gz
         # state: present

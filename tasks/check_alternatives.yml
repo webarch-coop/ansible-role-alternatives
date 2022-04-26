@@ -17,6 +17,9 @@
       when:
         - ansible_local.update_alternatives.selections[alt_update.name] == alt_update 
 
+    - name: Debug fail
+      fail:
+
     - name: Debug alternative
       debug:
         var: alt_update
