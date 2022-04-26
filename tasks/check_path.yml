@@ -14,11 +14,15 @@
         path: "{{ path }}"
       register: alternatives_path
 
-    - name: Fail if path doesn't exist"
-      ansible.builtin.assert:
-        that:
-          - alternatives_path.stat.exists
-        fail_msg: "The file {{ path }} doesn't exist"
+    # - name: Fail if path doesn't exist
+    #   ansible.builtin.assert:
+    #     that:
+    #       - alternatives_path.stat.exists
+    #     fail_msg: "The file {{ path }} doesn't exist"
+
+    - name: Warn that path doesn't exist
+      debug:
+        msg: "The file {{ path }} doesn't exist"
 
   tags:
     - alternatives
