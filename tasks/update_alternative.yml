@@ -11,7 +11,6 @@
               update-alternatives {% if ansible_verbosity >= 1 %}--verbose{% elif alternatives_debug and ansible_verbosity >= 2 %}--debug{% endif %}
               --remove {{ alt_update.name | quote }} {{ alternative.alternative | quote }}
           when: ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
-        - ( alternative.state is defined ) and ( alternative.state == "absent" )
 
         - name: "Remove alternative {{ alternative.alternative }}"
           ansible.builtin.command:
