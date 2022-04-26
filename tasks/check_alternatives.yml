@@ -4,7 +4,7 @@
 
     - name: Debug alternatives
       fail:
-        msg: "{{ alt_update.alternatives | map(attribute='alternative' }}"
+        msg: "{{ alt_update.alternatives | map(attribute='alternative') }}"
 
     - name: Proposed alternative doesn't match local facts
       ansible.builtin.debug:
