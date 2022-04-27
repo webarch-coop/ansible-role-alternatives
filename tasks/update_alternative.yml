@@ -44,9 +44,9 @@
       block:
 
         - name: "Loop though the {{ alt_update.name }} slaves to generate the slaves part of the update-alternatives command"
-          include_tasks: update_slave.yml 
+          include_tasks: update_slave.yml
           when:
-            - ( alt_update.slaves is defined ) and ( alt_update.slaves != [] ) 
+            - ( alt_update.slaves is defined ) and ( alt_update.slaves != [] )
             - ( alternative.slaves is defined ) and ( alternative.slaves != [] )
           loop: "{{ alt_update.slaves }}"
           loop_control:
