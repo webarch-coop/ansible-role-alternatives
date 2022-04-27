@@ -43,16 +43,22 @@
     - name: Update alternative
       block:
 
+        - name: "Loop though the {{ alt_update.name }} slaves to generate the slaves part of the update-alternatives command"
+          include_tasks: update_slave.yml 
+          when:
+            - ( alt_update.slaves is defined ) and ( alt_update.slaves != [] ) 
+            - ( alternative.slaves is defined ) and ( alternative.slaves != [] )
+          loop: "{{ alt_update.slaves }}"
+          loop_control:
+            loop_var: slave
+            label: "{{ slave.path }}"
+
         - name: "Check update alternative {{ alternative.alternative }}"
           ansible.builtin.debug:
             msg: >
               update-alternatives {% if alternatives_debug and ansible_verbosity >= 2 %}--debug{% elif ansible_verbosity == 1 %}--verbose{% endif %}
               --install {{ alt_update.link | quote }} {{ alt_update.name | quote }} {{ alternative.alternative | quote }} {{ alternative.priority | quote }}
-              {% if alternative.slaves is defined %}
-                {% for slave in alternative.slaves %}
-                  --slave {{ alt_update.link | quote }} {{ slave.name | quote }} {{ slave.path | quote }}
-                {% endfor %}
-              {% endif %}
+              {% if alternative_slaves is defined and alternative_slaves | length > 0 %}{{ alternative_slaves }}{% endif %}
           when: ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
 
         - name: "Update alternative {{ alternative.alternative }}"
@@ -60,11 +66,7 @@
             cmd: >
               update-alternatives {% if alternatives_debug and ansible_verbosity >= 2 %}--debug{% elif ansible_verbosity == 1 %}--verbose{% endif %}
               --install {{ alt_update.link | quote }} {{ alt_update.name | quote }} {{ alternative.alternative | quote }} {{ alternative.priority | quote }}
-              {% if alternative.slaves is defined %}
-                {% for slave in alternative.slaves %}
-                  --slave {{ alt_update.link | quote }} {{ slave.name | quote }} {{ slave.path | quote }}
-                {% endfor %}
-              {% endif %}
+              {% if alternative_slaves is defined and alternative_slaves | length > 0 %}{{ alternative_slaves }}{% endif %}
           register: alternative_updated
           notify: Update ansible_local
 
