@@ -19,11 +19,11 @@
       ansible.builtin.set_fact:
         alternatives_jc: "{{ jc_a.stdout | from_json }}"
 
-    # - name: The version of jc needs to be 1.18.7 or greater
-    #   assert:
-    #     that:
-    #       - alternatives_jc_json.version | string is version('1.18.7', '>=')
-    #     quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
+    - name: The version of jc needs to be 1.18.8 or greater
+      assert:
+        that:
+          - alternatives_jc_json.version | string is version('1.18.8', '>=')
+        quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
     - name: Include tasks to generate alternatives present and alternatives absent tasks
       ansible.builtin.include_tasks: alternatives.yml
