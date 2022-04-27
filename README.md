@@ -2,82 +2,13 @@
 
 An Ansible role to manage [Debian alternatives](https://wiki.debian.org/DebianAlternatives), see the [update-alternatives man page](https://manpages.debian.org/update-alternatives).
 
-## Plan
-
-The plan for this role is to have a `defaults/main.yml` containing a list of Debian alternatives we want to configure:
-
-```yml
-alternatives: true
-alternatives_update:
-  - name: php
-    state: present
-    alternatives:
-      - path: /usr/bin/php7.4
-        state: present
-        priority: 74
-      - path: /usr/bin/php8.0
-        state: present
-        priority: 80
-      - path: /usr/bin/php8.1
-        state: present
-        priority: 81
-```
-
-And for the names from this list to be used by a `/etc/ansible/facts.d/alternatives.fact` script which runs:
+This role requires [jc](https://git.coop/webarch/jq) version 1.18.8 or greater and also haveing [yc](https://git.coop/webarch/yq) installed helps with the generation of the configuration, for example this command:
 
 ```bash
-update-alternatives --get-selections
+jc -p update-alternatives --query editor | yq -P
 ```
 
-Then check that each `alternatives_names` is included in the first column and if it is then runs:
+Will generate a block of YAML that can be edited as necessary and used with this role as a item in the `alternatives_update` array.
 
-```bash
-update-alternatives --query php
-Name: php
-Link: /usr/bin/php
-Slaves:
- php.1.gz /usr/share/man/man1/php.1.gz
-Status: auto
-Best: /usr/bin/php8.1
-Value: /usr/bin/php8.1
-
-Alternative: /usr/bin/php7.4
-Priority: 74
-Slaves:
- php.1.gz /usr/share/man/man1/php7.4.1.gz
-
-Alternative: /usr/bin/php8.0
-Priority: 80
-Slaves:
- php.1.gz /usr/share/man/man1/php8.0.1.gz
-
-Alternative: /usr/bin/php8.1
-Priority: 81
-Slaves:
- php.1.gz /usr/share/man/man1/php8.1.1.gz
-```
-
-And then this is used to generate `ansible_local` facts like this:
-
-```yml
-alternatives:
-  - name: php
-    state: present
-    link: /usr/bin/php
-    best: /usr/bin/php8.1
-    value: /usr/bin/php8.1
-    alternatives:
-      - path: /usr/bin/php7.4
-        state: present
-        priority: 74
-      - path: /usr/bin/php8.0
-        state: present
-        priority: 80
-      - path: /usr/bin/php8.1
-        state: present
-        priority: 81
-```
-
-And then this role updates alternatives when the proposed alternatives don't match the facts.
 
 

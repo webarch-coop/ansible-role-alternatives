@@ -23,7 +23,7 @@
     #     fail_msg: "The file {{ path }} doesn't exist"
 
     - name: Warn that path doesn't exist
-      debug:
+      ansible.builtin.debug:
         msg: "The file {{ path }} doesn't exist"
 
   tags:
