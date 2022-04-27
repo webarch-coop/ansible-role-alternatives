@@ -43,6 +43,10 @@
     - name: Update alternative
       block:
 
+        - name: "Set a empty variables for the slaves part of the update-alternatives command for {{ alt_update.name }} alternative {{ alternative.alternative }}"
+          set_fact:
+            alternative_slaves: ""
+
         - name: "Loop though the {{ alt_update.name }} slaves to generate the slaves part of the update-alternatives command"
           include_tasks: update_slave.yml
           when:
