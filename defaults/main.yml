@@ -113,10 +113,10 @@ alternatives_update:
       - alternative: /run/php/php7.4-fpm.sock
         # state: present
         priority: 74
-    #   - alternative: /run/php/php8.0-fpm.sock
-    #     # state: present
-    #     priority: 80
-    #   - alternative: /run/php/php8.1-fpm.sock
-    #     # state: present
-    #     priority: 81
+      - alternative: /run/php/php8.0-fpm.sock
+        # state: present
+        priority: 80
+      - alternative: /run/php/php8.1-fpm.sock
+        # state: present
+        priority: 81
 ...
