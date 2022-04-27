@@ -27,7 +27,7 @@
     - name: The version of jc needs to be 1.18.8 or greater
       assert:
         that:
-          - alternatives_jc.json.version | string is version('1.18.8', '>=')
+          - alternatives_jc.version | string is version('1.18.8', '>=')
         quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
     - name: Include tasks to generate alternatives present and alternatives absent tasks
