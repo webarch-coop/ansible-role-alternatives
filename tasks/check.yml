@@ -35,7 +35,7 @@
           ansible.builtin.assert:
             that:
               - alternatives_update | type_debug == "list"
-        quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
+            quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
         - name: Include checks for the alternatives present if they don't match existing alternatives
           ansible.builtin.include_tasks: check_alternatives.yml
