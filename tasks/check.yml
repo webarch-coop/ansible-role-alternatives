@@ -6,6 +6,7 @@
       ansible.builtin.assert:
         that:
           - ansible_local.update_alternatives.version is version('1.15.0', '>=')
+        quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
       when: ansible_local.update_alternatives.version is defined
 
     - name: Set a fact to indicate there is --debug support when updates-alternatives 1.19.3 or greater
@@ -20,6 +21,7 @@
         that:
           - alternatives | type_debug == "bool"
           - alternative_facts | type_debug == "bool"
+        quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
     - name: Check alternatives_update list
       block:
@@ -33,6 +35,7 @@
           ansible.builtin.assert:
             that:
               - alternatives_update | type_debug == "list"
+        quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
         - name: Include checks for the alternatives present if they don't match existing alternatives
           ansible.builtin.include_tasks: check_alternatives.yml

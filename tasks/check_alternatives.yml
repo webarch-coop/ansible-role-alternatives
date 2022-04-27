@@ -22,11 +22,13 @@
         that:
           - alt_update.name is defined
           - alt_update.name | type_debug is regex('AnsibleUnicode|AnsibleUnsafeText|str')
+        quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
     - name: Check alternative state
       ansible.builtin.assert:
         that:
           - alt_update.state is regex('^present|absent$')
+        quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
       when: alt_update.state is defined
 
     - name: Checks when alternative is present
@@ -38,17 +40,20 @@
               - alt_update.link is defined
               - alt_update.link is regex('^\/')
               - alt_update.link | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
+            quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
         - name: Check alternative status
           ansible.builtin.assert:
             that:
               - alt_update.status is defined
               - alt_update.status is regex('auto|manual$')
+            quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
         - name: Check that best is one of the alternatives
           ansible.builtin.assert:
             that:
               - alt_update.best in ( alt_update.alternatives | map(attribute='alternative') )
+            quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
         - name: Check best path
           ansible.builtin.include_tasks: check_path.yml
@@ -59,6 +64,7 @@
           ansible.builtin.assert:
             that:
               - alt_update.value in ( alt_update.alternatives | map(attribute='alternative') )
+            quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
         - name: Check value path
           ansible.builtin.include_tasks: check_path.yml

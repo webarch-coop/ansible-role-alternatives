@@ -12,11 +12,13 @@
         that:
           - slave.name is defined
           - slave.name | type_debug is regex('^AnsibleUnicode|AnsibleUnsafeText|str$')
+        quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
     - name: Check slave state is defined
       ansible.builtin.assert:
         that:
           - slave.state is regex('^present|absent$')
+        quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
       when: slave.state is defined
 
     - name: Check slave path

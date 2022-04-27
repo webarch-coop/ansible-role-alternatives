@@ -12,11 +12,13 @@
         that:
           - alt.alternative is defined
           - alt.alternative | type_debug is regex('AnsibleUnicode|AnsibleUnsafeText|str')
+        quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
     - name: Check alternative state
       ansible.builtin.assert:
         that:
           - alt.state is regex('^present|absent$')
+        quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
       when: alt.state is defined
 
     - name: Check alternative link
@@ -30,6 +32,7 @@
         that:
           - alt.priority | type_debug == "int"
           - alt.priority is regex('^[0-9]{1,4}$')
+        quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
     - name: Check alternative slaves
       block:
@@ -38,6 +41,7 @@
           ansible.builtin.assert:
             that:
               - alt.slaves | type_debug == "list"
+            quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
         - name: Include checks for alternative slaves when present
           ansible.builtin.include_tasks: check_slave.yml
