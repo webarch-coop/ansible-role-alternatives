@@ -94,10 +94,6 @@
 
       when: ( alternative.state is not defined ) or ( alternative.state == "present" )
 
-    - name: Reload ansible_local.alternatives facts
-      ansible.builtin.meta: flush_handlers
-      when: ( alternative_removed.changed ) or ( alternative_updated.changed )
-
   tags:
     - alternatives
 ...

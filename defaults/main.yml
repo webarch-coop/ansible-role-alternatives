@@ -106,9 +106,9 @@ alternatives_update:
     link: /run/php/php-fpm.sock
     # state: present
     # state: absent
-    best: /run/php/php7.4-fpm.sock
+    best: /run/php/php8.1-fpm.sock
     status: auto
-    value: /run/php/php7.4-fpm.sock
+    value: /run/php/php8.1-fpm.sock
     alternatives:
       - alternative: /run/php/php7.4-fpm.sock
         # state: present
