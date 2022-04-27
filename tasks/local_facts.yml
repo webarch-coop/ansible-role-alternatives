@@ -19,6 +19,11 @@
       ansible.builtin.set_fact:
         alternatives_jc: "{{ jc_a.stdout | from_json }}"
 
+    - name: Debug the jc details
+      debug:
+        var: alternatives_jc
+        verbosity: 2
+
     - name: The version of jc needs to be 1.18.8 or greater
       assert:
         that:
