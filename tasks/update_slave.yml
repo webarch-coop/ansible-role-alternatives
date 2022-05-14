@@ -6,6 +6,12 @@
       - "alt_slave.name {{ alt_slave.name }}"
       - "alt_slave.path: {{ alt_slave.path }}"
     verbosity: 2
+  loop: "{{ alternative.slaves }}"
+  loop_control:
+    loop_var: alt_slave
+    label: "{{ alt_slave.name }}"
+  tags:
+    - alternatives
 
 - name: "Set a variable for the slaves part of the update-alternatives command for {{ alt_update.name }} alternative {{ alternative.alternative }}"
   set_fact:
