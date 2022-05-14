@@ -1,5 +1,5 @@
 ---
-- name: "Set empty variables for the slaves part of the update-alternatives command for {{ alt_update.name }} alternative {{ alternative.alternative }}"
+- name: "Set a variable for the slaves part of the update-alternatives command for {{ alt_update.name }} alternative {{ alternative.alternative }}"
   set_fact:
     alternative_slaves: "{{ alternative_slaves | default('') }} --slave {{ slave.path }} {{ alt_slave.name }} {{ alt_slave.path }}"
   when: slave.path | basename == alt_slave.name

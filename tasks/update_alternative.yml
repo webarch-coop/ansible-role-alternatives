@@ -52,7 +52,8 @@
           when:
             - ( alt_update.slaves is defined ) and ( alt_update.slaves != [] )
             - ( alternative.slaves is defined ) and ( alternative.slaves != [] )
-          loop: "{{ alt_update.slaves }}"
+          # loop: "{{ alt_update.slaves }}"
+          loop: "{{ alternative.slaves }}"
           loop_control:
             loop_var: slave
             label: "{{ slave.path }}"
