@@ -1,4 +1,12 @@
 ---
+- name: Debug slave
+  debug:
+    msg:
+      - "slave.path {{ slave.path }}"
+      - "alt_slave.name {{ alt_slave.name }}"
+      - "alt_slave.path: {{ alt_slave.path }}"
+    verbosity: 2
+
 - name: "Set a variable for the slaves part of the update-alternatives command for {{ alt_update.name }} alternative {{ alternative.alternative }}"
   set_fact:
     alternative_slaves: "{{ alternative_slaves | default('') }} --slave {{ slave.path }} {{ alt_slave.name }} {{ alt_slave.path }}"
