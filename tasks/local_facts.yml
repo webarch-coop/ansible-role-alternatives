@@ -22,7 +22,7 @@
     - name: Debug the jc details
       debug:
         var: alternatives_jc
-        verbosity: 2
+        verbosity: 3
 
     - name: The version of jc needs to be 1.18.8 or greater
       assert:
