@@ -4,7 +4,7 @@ An Ansible role to manage [Debian alternatives](https://wiki.debian.org/DebianAl
 
 This role requires [jc](https://git.coop/webarch/jq) version 1.18.8 or greater to generate JSON from the output of `update-alternatives --query`.
 
-[yc](https://git.coop/webarch/yq) can be used to convert JSON to YAML for the generation of the configuration, for example this command:
+[yq](https://git.coop/webarch/yq) can be used to convert JSON to YAML for the generation of the configuration, for example this command:
 
 ```bash
 jc -p update-alternatives --query editor | yq -P
