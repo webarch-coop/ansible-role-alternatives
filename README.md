@@ -29,3 +29,9 @@ There are two [default variables](defaults/main.yml):
 | `alternatives_update` | undefined        | Define this variable with list of alternatives that match the `jc -p update-alternatives --query` output |
 
 Note that this role doesn't use the [Ansible alternatives module](https://docs.ansible.com/ansible/latest/collections/community/general/alternatives_module.html) because that [currently has no support for "slaves"](https://github.com/ansible-collections/community.general/issues/3366).
+
+The primary URL of this repo is [`https://git.coop/webarch/alternatives`](https://git.coop/webarch/alternatives) however it is also [mirrored to GitHub](https://github.com/webarch-coop/ansible-role-alternatives) and [available via Ansible Galaxy](https://galaxy.ansible.com/chriscroome/alternatives).
+
+If you use this role please use a tagged release, see [the release notes](https://git.coop/webarch/alternatives/-/releases).
+
+This role can also be used with the [localhost repo](https://git.coop/webarch/localhost) to install `alternatives` locally.
