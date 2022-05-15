@@ -1,9 +1,10 @@
 ---
 - name: Debug slave
-  debug:
+  ansible.builtin.debug:
     msg:
       - "alt_update.name {{ alt_update.name | quote }}"
       - "alt_update.link {{ alt_update.link | quote }}"
+      - "alternative.alternative {{ alternative.alternative | quote }}"
       - "alt_slave.name {{ alt_slave.name | quote }}"
       - "alt_slave.path: {{ alt_slave.path | quote }}"
       - "slave.name {{ slave.name | quote }}"
@@ -18,8 +19,8 @@
     - alternatives
 
 - name: "Set a variable for the slaves part of the update-alternatives command for {{ alt_update.name }} alternative {{ alternative.alternative }}"
-  set_fact:
-    alternative_slaves: "{{ alternative_slaves | default('') }}--slave {{ alt_update.name | quote }} {{ slave.name | quote }} {{ slave.path | quote }}"
+  ansible.builtin.set_fact:
+    alternative_slaves: "{{ alternative_slaves | default('') }}--slave {{ alternative.alternative | quote }} {{ slave.name | quote }} {{ slave.path | quote }}"
   when:
     - slave.name == alt_slave.name
   loop: "{{ alternative.slaves }}"
