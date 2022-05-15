@@ -2,9 +2,11 @@
 - name: Debug slave
   debug:
     msg:
-      - "slave.path {{ slave.path }}"
+      - "alt_update.link {{ alt_update.link }}"
       - "alt_slave.name {{ alt_slave.name }}"
       - "alt_slave.path: {{ alt_slave.path }}"
+      - "slave.name {{ slave.name }}"
+      - "slave.path {{ slave.path }}"
     verbosity: 2
   when: slave.name == alt_slave.name
   loop: "{{ alternative.slaves }}"
