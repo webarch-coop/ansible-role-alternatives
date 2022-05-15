@@ -1,5 +1,7 @@
 # Webarchitects Debian alternatives Ansible Role
 
+[![pipeline status](https://git.coop/webarch/alternatives/badges/main/pipeline.svg)](https://git.coop/webarch/alternatives/-/commits/main)
+
 An Ansible role to manage [Debian alternatives](https://wiki.debian.org/DebianAlternatives), see the [update-alternatives man page](https://manpages.debian.org/update-alternatives).
 
 This role requires [jc](https://git.coop/webarch/jq) version 1.18.8 or greater to generate JSON from the output of `update-alternatives --query`.
