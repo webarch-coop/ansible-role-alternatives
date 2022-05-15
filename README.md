@@ -27,3 +27,5 @@ There are two [default variables](defaults/main.yml):
 | `alternatives`        | `true`           | Run the tasks in this role, set to `false` for all tasks to be skipped                                   |
 | `alternative_facts`   | `true`           | Install and run the `update_alternatives.fact` script in `/etc/ansible/facts.d`                          |
 | `alternatives_update` | undefined        | Define this variable with list of alternatives that match the `jc -p update-alternatives --query` output |
+
+Note that this role doesn't use the [Ansible alternatives module](https://docs.ansible.com/ansible/latest/collections/community/general/alternatives_module.html) because that [currently has no support for "slaves"](https://github.com/ansible-collections/community.general/issues/3366).
