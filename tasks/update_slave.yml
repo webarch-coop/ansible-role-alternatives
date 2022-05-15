@@ -18,7 +18,7 @@
 
 - name: "Set a variable for the slaves part of the update-alternatives command for {{ alt_update.name }} alternative {{ alternative.alternative }}"
   set_fact:
-    alternative_slaves: "{{ alternative_slaves | default('') }} --slave {{ alt_update.link | quote }} {{ slave.name | quote }} {{ slave.path | quote }}"
+    alternative_slaves: "{{ alternative_slaves | default('') }} --slave {{ alt_slave.name | quote }} {{ slave.name | quote }} {{ slave.path | quote }}"
   when: slave.name == alt_slave.name
   loop: "{{ alternative.slaves }}"
   loop_control:
