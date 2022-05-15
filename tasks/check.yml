@@ -2,6 +2,10 @@
 - name: Check alternatives variables
   block:
 
+    - name: Assume there is no --debug support
+      ansible.builtin.set_fact:
+        alternatives_debug: false
+
     - name: Check that we have updates-alternatives 1.15.0 or greater
       ansible.builtin.assert:
         that:
