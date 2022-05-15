@@ -20,9 +20,8 @@
 
 - name: "Set a variable for the slaves part of the update-alternatives command for {{ alt_update.name }} alternative {{ alternative.alternative }}"
   ansible.builtin.set_fact:
-    alternative_slaves: "{{ alternative_slaves | default('') }} --slave {{ alternative.alternative | quote }} {{ slave.name | quote }} {{ slave.path | quote }}"
-  when:
-    - slave.name == alt_slave.name
+    alternative_slaves: "{{ alternative_slaves | default('') }} --slave {{ slave.path | quote }} {{ slave.name | quote }} {{ slave.path | quote }}"
+  when: slave.name == alt_slave.name
   loop: "{{ alternative.slaves }}"
   loop_control:
     loop_var: alt_slave
