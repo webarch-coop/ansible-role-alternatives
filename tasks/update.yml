@@ -3,7 +3,7 @@
   block:
 
     - name: "Check alternative {{ alt_update.name }} absent"
-      debug:
+      ansible.builtin.debug:
         msg: "update-alternatives --remove-all {{ alt_update.name }}"
       when:
         - ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
@@ -43,7 +43,7 @@
           block:
 
             - name: Check set the link group to auto if was set to manual and should be set to auto
-              debug:
+              ansible.builtin.debug:
                 msg: "update-alternatives --auto {{ alt_update.name }}"
               when: ( ansible_check_mode ) or ( ansible_verbosity >= 1 )
 

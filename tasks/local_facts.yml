@@ -20,12 +20,12 @@
         alternatives_jc: "{{ jc_a.stdout | from_json }}"
 
     - name: Debug the jc details
-      debug:
+      ansible.builtin.debug:
         var: alternatives_jc
         verbosity: 3
 
     - name: The version of jc needs to be 1.18.8 or greater
-      assert:
+      ansible.builtin.assert:
         that:
           - alternatives_jc.version | string is version('1.18.8', '>=')
         quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
