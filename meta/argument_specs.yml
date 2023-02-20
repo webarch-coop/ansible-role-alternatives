@@ -1,0 +1,116 @@
+# Copyright 2022-2023 Chris Croome
+#
+# This file is part of the Webarchitects Debian alternatives Ansible role.
+#
+# The Webarchitects Debian alternatives Ansible role is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# The Webarchitects Debian alternatives Ansible role is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with the Webarchitects Debian alternatives Ansible role. If not, see <https://www.gnu.org/licenses/>.
+---
+argument_specs:
+  main:
+    author: Chris Croome
+    description: An Ansible role to manage Debian alternatives.
+    short_description: The main entry point for the Ansible role.
+    options:
+      alternatives:
+        type: bool
+        required: true
+        description: Run the tasks in this role.
+      alternative_facts:
+        type: bool
+        required: true
+        description: Run the local facts tasks in this role.
+      alternatives_update:
+        type: list
+        required: false
+        description: A list of alternatives to update.
+        options:
+          alternatives:
+            type: list
+            required: true
+            description: A list of alternatives.
+            options:
+              alternative:
+                type: str
+                required: true
+                description: The alternative path.
+              priority:
+                type: str
+                required: true
+                description: The alternative priority.
+              slaves:
+                type: list
+                required: false
+                options:
+                  name:
+                    type: str
+                    required: true
+                    description: The name of the slave.
+                  path:
+                    type: str
+                    required: true
+                    description: The path for the slave.
+                  state:
+                    type: bool
+                    required: false
+                    description: The state of the slave.
+              state:
+                type: str
+                required: false
+                description: The state of the alternative.
+                choices:
+                  - absent
+                  - present
+          best:
+            type: str
+            required: false
+            description: The best alternative path.
+          link:
+            type: str
+            required: true
+            description: The symlink for the alternative.
+          name:
+            type: str
+            required: true
+            description: The name of the alternative.
+          slaves:
+            type: list
+            required: false
+            description: A list of alternative slaves.
+            options:
+              name:
+                type: str
+                required: true
+                description: The name of the slave.
+              path:
+                type: str
+                required: true
+                description: The path of the slave.
+              state:
+                type: str
+                required: false
+                description: The state of the slave.
+                choices:
+                  - absent
+                  - present
+          state:
+            type: str
+            required: false
+            description: The state of the alternative.
+            choices:
+              - absent
+              - present
+          status:
+            type: str
+            required: true
+            description: The status of the alternative.
+            choices:
+              - auto
+              - manual
+          value:
+            type: str 
+            required: true
+            description: The path to the alternative.
+...

@@ -1,3 +1,12 @@
+# Copyright 2022-2023 Chris Croome
+#
+# This file is part of the Webarchitects Debian alternatives Ansible role.
+#
+# The Webarchitects Debian alternatives Ansible role is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+#
+# The Webarchitects Debian alternatives Ansible role is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with the Webarchitects Debian alternatives Ansible role. If not, see <https://www.gnu.org/licenses/>.
 ---
 alternatives: true
 alternative_facts: true
@@ -16,21 +25,21 @@ alternative_facts: true
 #     alternatives:
 #       - alternative: /usr/bin/php7.4
 #         # state: present
-#         priority: 74
+#         priority: "74"
 #         slaves:
 #           - name: php.1.gz
 #             # state: present
 #             path: /usr/share/man/man1/php7.4.1.gz
 #       - alternative: /usr/bin/php8.0
 #         # state: present
-#         priority: 80
+#         priority: "80"
 #         slaves:
 #           - name: php.1.gz
 #             # state: present
 #             path: /usr/share/man/man1/php8.0.1.gz
 #       - alternative: /usr/bin/php8.1
 #         # state: present
-#         priority: 81
+#         priority: "81"
 #         slaves:
 #           - name: php.1.gz
 #             # state: present
@@ -48,21 +57,21 @@ alternative_facts: true
 #     alternatives:
 #       - alternative: /usr/bin/phar7.4
 #         # state: present
-#         priority: 74
+#         priority: "74"
 #         slaves:
 #           - name: phar.1.gz
 #             # state: present
 #             path: /usr/share/man/man1/phar7.4.1.gz
 #       - alternative: /usr/bin/phar8.0
 #         # state: present
-#         priority: 80
+#         priority: "80"
 #         slaves:
 #           - name: phar.1.gz
 #             # state: present
 #             path: /usr/share/man/man1/phar8.0.1.gz
 #       - alternative: /usr/bin/phar8.1
 #         # state: present
-#         priority: 81
+#         priority: "81"
 #         slaves:
 #           - name: phar.1.gz
 #             # state: present
@@ -80,21 +89,21 @@ alternative_facts: true
 #     alternatives:
 #       - alternative: /usr/bin/phar.phar7.4
 #         # state: present
-#         priority: 74
+#         priority: "74"
 #         slaves:
 #           - name: phar.phar.1.gz
 #             # state: present
 #             path: /usr/share/man/man1/phar.phar7.4.1.gz
 #       - alternative: /usr/bin/phar.phar8.0
 #         # state: present
-#         priority: 80
+#         priority: "80"
 #         slaves:
 #           - name: phar.phar.1.gz
 #             # state: present
 #             path: /usr/share/man/man1/phar.phar8.0.1.gz
 #       - alternative: /usr/bin/phar.phar8.1
 #         # state: present
-#         priority: 81
+#         priority: "81"
 #         slaves:
 #           - name: phar.phar.1.gz
 #             # state: present
@@ -108,11 +117,11 @@ alternative_facts: true
 #     alternatives:
 #       - alternative: /run/php/php7.4-fpm.sock
 #         # state: present
-#         priority: 74
+#         priority: "74"
 #       - alternative: /run/php/php8.0-fpm.sock
 #         # state: present
-#         priority: 80
+#         priority: "80"
 #       - alternative: /run/php/php8.1-fpm.sock
 #         # state: present
-#         priority: 81
+#         priority: "81"
 ...
