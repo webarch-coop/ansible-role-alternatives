@@ -30,8 +30,16 @@ There are two [default variables](defaults/main.yml):
 
 Note that this role doesn't use the [Ansible alternatives module](https://docs.ansible.com/ansible/latest/collections/community/general/alternatives_module.html) because that [currently has no support for "slaves"](https://github.com/ansible-collections/community.general/issues/3366).
 
+This role can also be used with the [localhost repo](https://git.coop/webarch/localhost) to install `alternatives` locally.
+
+## Repository
+
 The primary URL of this repo is [`https://git.coop/webarch/alternatives`](https://git.coop/webarch/alternatives) however it is also [mirrored to GitHub](https://github.com/webarch-coop/ansible-role-alternatives) and [available via Ansible Galaxy](https://galaxy.ansible.com/chriscroome/alternatives).
 
 If you use this role please use a tagged release, see [the release notes](https://git.coop/webarch/alternatives/-/releases).
 
-This role can also be used with the [localhost repo](https://git.coop/webarch/localhost) to install `alternatives` locally.
+## Copyright
+
+Copyright 2022-2023 Chris Croome, &lt;[chris@webarchitects.co.uk](mailto:chris@webarchitects.co.uk)&gt;.
+
+This role is released under [the same terms as Ansible itself](https://github.com/ansible/ansible/blob/devel/COPYING), the [GNU GPLv3](LICENSE).
