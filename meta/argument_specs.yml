@@ -110,7 +110,7 @@ argument_specs:
               - auto
               - manual
           value:
-            type: str 
+            type: str
             required: true
             description: The path to the alternative.
 ...
