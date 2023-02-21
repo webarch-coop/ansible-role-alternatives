@@ -22,7 +22,8 @@ fi
 
 if [[ "${#selections[@]}" -gt "0" ]]
 then
-  jo state=present version="${version}" "$(
+  # shellcheck disable=SC2046
+  jo state=present version="${version}" $(
     for sel in "${selections[@]}"
     do
       if selection=$(jc update-alternatives --query "${sel}")
@@ -30,7 +31,7 @@ then
         echo "selections[${sel}]=${selection}"
       fi
     done
-  )"
+  )
 else
   echo "Config file /etc/ansible/alternatives empty" >&2
   jo state=absent
