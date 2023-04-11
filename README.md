@@ -20,7 +20,7 @@ If the supplied configuration matches and facts then all the update tasks will b
 
 If a `state` variable is added into the settings array then this can be set to `absent` to remove alternatives, it defaults to `present`, see the [defaults/main.yml](defaults/main.yml) for an example.
 
-There are two [default variables](defaults/main.yml):
+There are tree [default variables](defaults/main.yml):
 
 | Variable name         | Default value    | Comment                                                                                                  |
 |-----------------------|------------------|----------------------------------------------------------------------------------------------------------|

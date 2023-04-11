@@ -20,7 +20,9 @@
         - ansible_local.update_alternatives.selections[alt_update.name] is defined
 
     - name: "Alternative {{ alt_update.name }} absent"
-      ansible.builtin.command: "update-alternatives --remove-all {{ alt_update.name }}"
+      community.general.alternatives:
+        name: "{{ alt_update.name }}"
+        state: absent
       when:
         - ( alt_update.state is defined ) and ( alt_update.state == "absent" )
         - ansible_local.update_alternatives.selections[alt_update.name] is defined
