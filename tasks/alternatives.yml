@@ -13,7 +13,7 @@
 
     - name: Generate an array of alternatives present for Ansible < 2.13.0
       ansible.builtin.set_fact:
-        alternatives_present: "{{ alternatives_present | default([]) }} + [ '{{ alt_update.name }}' ]"
+        alternatives_present: "{{ alternatives_present | default([]) }} + ['{{ alt_update.name }}']"
       when:
         - ansible_version.full is version('2.13.0', '<')
         - ( alt_update.state is not defined ) or ( alt_update.state == "present" )
@@ -24,7 +24,7 @@
 
     - name: Generate an array of alternatives present for Ansible >= 2.13.0
       ansible.builtin.set_fact:
-        alternatives_present: "{{ alternatives_present | default([]) + [ alt_update.name ] }}"
+        alternatives_present: "{{ alternatives_present | default([]) + [alt_update.name] }}"
       when:
         - ansible_version.full is version('2.13.0', '>=')
         - ( alt_update.state is not defined ) or ( alt_update.state == "present" )
@@ -41,7 +41,7 @@
 
     - name: Generate an array of alternatives absent for Ansible < 2.13.0
       ansible.builtin.set_fact:
-        alternatives_absent: "{{ alternatives_absent | default([]) }} + [ '{{ alt_update.name }}' ]"
+        alternatives_absent: "{{ alternatives_absent | default([]) }} + ['{{ alt_update.name }}']"
       when:
         - ansible_version.full is version('2.13.0', '<')
         - ( alt_update.state is defined ) and ( alt_update.state == "absent" )
@@ -52,7 +52,7 @@
 
     - name: Generate an array of alternatives absent for Ansible >= 2.13.0
       ansible.builtin.set_fact:
-        alternatives_absent: "{{ alternatives_absent | default([]) + [ alt_update.name ] }}"
+        alternatives_absent: "{{ alternatives_absent | default([]) + [alt_update.name] }}"
       when:
         - ansible_version.full is version('2.13.0', '>=')
         - ( alt_update.state is defined ) and ( alt_update.state == "absent" )

@@ -10,7 +10,6 @@
 ---
 # # https://ansible-lint.readthedocs.io/rules/
 skip_list:
-  - schema[meta]
   # You can improve the task key order
   - key-order[task]
   # Jinja templates should only be at the end of 'name'
