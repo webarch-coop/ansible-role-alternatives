@@ -61,7 +61,7 @@
         - name: Check that best is one of the alternatives
           ansible.builtin.assert:
             that:
-              - alt_update.best in ( alt_update.alternatives | map(attribute='alternative') )
+              - alt_update.best in ( alt_update.alternatives | map(attribute='alternatives') )
             quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
         - name: Check best path
@@ -72,7 +72,7 @@
         - name: Check that value is one of the alternatives
           ansible.builtin.assert:
             that:
-              - alt_update.value in ( alt_update.alternatives | map(attribute='alternative') )
+              - alt_update.value in ( alt_update.alternatives | map(attribute='alternatives') )
             quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
         - name: Check value path
