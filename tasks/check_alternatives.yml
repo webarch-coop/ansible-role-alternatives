@@ -58,10 +58,17 @@
               - alt_update.status is regex('auto|manual$')
             quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
+        - name: Debug best alternatives
+          ansible.builtin.debug:
+            msg:
+              - "alternatives: {{ alt_update.alternatives | map(attribute='alternative') }}"
+              - "bast: {{ alt_update.best }}"
+            verbosity: "{% if ansible_check_mode | bool %}0{% else %}1{% endif %}"
+
         - name: Check that best is one of the alternatives
           ansible.builtin.assert:
             that:
-              - alt_update.best in ( alt_update.alternatives | map(attribute='alternatives') )
+              - alt_update.best in ( alt_update.alternatives | map(attribute='alternative') )
             quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
         - name: Check best path
@@ -72,7 +79,7 @@
         - name: Check that value is one of the alternatives
           ansible.builtin.assert:
             that:
-              - alt_update.value in ( alt_update.alternatives | map(attribute='alternatives') )
+              - alt_update.value in ( alt_update.alternatives | map(attribute='alternative') )
             quiet: "{% if ansible_check_mode or ansible_verbosity >= 1 %}false{% else %}true{% endif %}"
 
         - name: Check value path
