@@ -62,7 +62,7 @@
           ansible.builtin.debug:
             msg:
               - "alternatives: {{ alt_update.alternatives | map(attribute='alternative') }}"
-              - "bast: {{ alt_update.best }}"
+              - "best: {{ alt_update.best }}"
             verbosity: "{% if ansible_check_mode | bool %}0{% else %}1{% endif %}"
 
         - name: Check that best is one of the alternatives
