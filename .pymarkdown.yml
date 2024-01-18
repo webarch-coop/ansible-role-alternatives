@@ -8,8 +8,7 @@
 #
 # You should have received a copy of the GNU General Public License along with the Webarchitects Debian alternatives Ansible role. If not, see <https://www.gnu.org/licenses/>.
 ---
-- name: Update ansible_local facts
-  ansible.builtin.setup:
-    filter: ansible_local
-  listen: Update ansible_local
+plugins:
+  md013:
+    enabled: false
 ...
