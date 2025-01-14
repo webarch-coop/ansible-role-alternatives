@@ -24,7 +24,7 @@ There are tree [default variables](defaults/main.yml):
 
 | Variable name         | Default value    | Comment                                                                                                  |
 |-----------------------|------------------|----------------------------------------------------------------------------------------------------------|
-| `alternatives`        | `true`           | Run the tasks in this role, set to `false` for all tasks to be skipped                                   |
+| `alternatives`        | `false`          | Run the tasks in this role, set to `true` for tasks to be run                                            |
 | `alternative_facts`   | `true`           | Install and run the `update_alternatives.fact` script in `/etc/ansible/facts.d`                          |
 | `alternatives_update` | undefined        | Define this variable with list of alternatives that match the `jc -p update-alternatives --query` output |
 
@@ -40,6 +40,6 @@ If you use this role please use a tagged release, see [the release notes](https:
 
 ## Copyright
 
-Copyright 2022-2024 Chris Croome, &lt;[chris@webarchitects.co.uk](mailto:chris@webarchitects.co.uk)&gt;.
+Copyright 2022-2025 Chris Croome, &lt;[chris@webarchitects.co.uk](mailto:chris@webarchitects.co.uk)&gt;.
 
 This role is released under [the same terms as Ansible itself](https://github.com/ansible/ansible/blob/devel/COPYING), the [GNU GPLv3](LICENSE).

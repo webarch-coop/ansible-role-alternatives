@@ -1,4 +1,4 @@
-# Copyright 2022-2024 Chris Croome
+# Copyright 2022-2025 Chris Croome
 #
 # This file is part of the Webarchitects Debian alternatives Ansible role.
 #
@@ -49,7 +49,7 @@
         line: "{{ alt }}"
         state: present
         create: true
-        mode: 0600
+        mode: "0600"
         owner: root
         group: root
       loop: "{{ alternatives_present }}"
@@ -65,7 +65,7 @@
         line: "{{ alt }}"
         state: absent
         create: true
-        mode: 0600
+        mode: "0600"
         owner: root
         group: root
       loop: "{{ alternatives_absent }}"
@@ -80,7 +80,7 @@
         path: /etc/ansible/facts.d
         recurse: true
         state: directory
-        mode: 0755
+        mode: "0755"
         owner: root
         group: root
 
@@ -88,7 +88,7 @@
       ansible.builtin.copy:
         src: update_alternatives.fact
         dest: /etc/ansible/facts.d/update_alternatives.fact
-        mode: 0755
+        mode: "0755"
         owner: root
         group: root
       notify: Update ansible_local
